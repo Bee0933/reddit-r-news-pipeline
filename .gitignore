@@ -1,0 +1,30 @@
+# Local Terraform configuration files
+*.tfstate
+*.tfstate.backup
+
+# Crash log files
+crash.log
+
+# Terraform variable files containing sensitive data
+*.tfvars
+*.tfvars.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore Terraform provider plugins and modules
+.terraform/
+.terraform.lock.hcl
+
+# Ignore sensitive information generated during runtime
+*.auto.tfvars
+
+# Ignore plan files
+*.tfplan
+
+# Ignore backups and temporary files
+*.bak
+*.swp
+*.tmp
+*.log

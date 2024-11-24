@@ -22,3 +22,27 @@ variable "space_secret_key" {
   sensitive   = true
 
 }
+
+variable "snowflake_account" {
+  type        = string
+  description = "snowflake account"
+  sensitive   = true
+}
+
+variable "snowflake_org_name" {
+  type        = string
+  description = "snowflake organization name"
+  sensitive   = true
+}
+
+variable "snowflake_private_key" {
+  type        = string
+  description = "snowflake private key"
+  sensitive   = true
+}
+
+variable "snowflake_user" {
+  type        = string
+  description = "snowflake user for terraform"
+}
+

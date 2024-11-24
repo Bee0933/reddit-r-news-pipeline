@@ -28,3 +28,5 @@ terraform.rc
 *.swp
 *.tmp
 *.log
+
+test

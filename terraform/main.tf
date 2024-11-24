@@ -21,12 +21,13 @@ resource "digitalocean_reserved_ip" "airflow-reserved-ip" {
   region     = digitalocean_droplet.airflow-server-0.region
 }
 
-# DO 
+# DigitalOcean Space bucket (S3) for reddit-r-news
 resource "digitalocean_spaces_bucket" "reddit-news-lake" {
   name   = "reddit-news-lake"
   region = "fra1"
 }
 
+# bucket cors configs
 resource "digitalocean_spaces_bucket_cors_configuration" "reddit-news-lake-cors-config" {
   bucket = digitalocean_spaces_bucket.reddit-news-lake.id
   region = "fra1"

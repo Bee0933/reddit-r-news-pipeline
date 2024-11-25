@@ -35,14 +35,19 @@ variable "snowflake_org_name" {
   sensitive   = true
 }
 
-variable "snowflake_private_key" {
-  type        = string
-  description = "snowflake private key"
-  sensitive   = true
-}
-
 variable "snowflake_user" {
   type        = string
   description = "snowflake user for terraform"
 }
 
+variable "snowflake_password" {
+  type        = string
+  description = "snowflake password"
+  sensitive   = true
+}
+
+variable "snowflake_role" {
+  type        = string
+  default     = "ACCOUNTADMIN"
+  description = "Snowflake Warehouse role"
+}

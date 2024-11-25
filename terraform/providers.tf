@@ -6,7 +6,7 @@ terraform {
     }
     snowflake = {
       source  = "Snowflake-Labs/snowflake"
-      version = "~> 0.87"
+      version = "~> 0.61"
     }
   }
   cloud {
@@ -19,17 +19,18 @@ terraform {
   }
 }
 
+# DigitalOcean Provider
 provider "digitalocean" {
   token             = var.do_token
   spaces_access_id  = var.space_access_id
   spaces_secret_key = var.space_secret_key
 }
 
+# Snowflake Provider
 provider "snowflake" {
-  role              = "SYSADMIN"
-  authenticator     = "SNOWFLAKE_JWT"
-  private_key       = var.snowflake_private_key
+  user              = var.snowflake_user
+  password          = var.snowflake_password
   account_name      = var.snowflake_account
   organization_name = var.snowflake_org_name
-  user              = var.snowflake_user
+  role              = var.snowflake_role
 }

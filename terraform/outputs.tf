@@ -14,14 +14,6 @@ output "airflow_reserved_ip" {
   value       = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
 }
 
-output "all_airflow_ips" {
-  description = "A summary of all IPs for the Airflow server"
-  value = {
-    droplet_public_ip = digitalocean_droplet.airflow-server-0.ipv4_address
-    reserved_ip       = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
-  }
-}
-
 output "spaces_bucket_details" {
   description = "Details of the DigitalOcean Spaces bucket"
   value = {
@@ -29,4 +21,13 @@ output "spaces_bucket_details" {
     region = digitalocean_spaces_bucket.reddit-news-lake.region
     url    = "https://${digitalocean_spaces_bucket.reddit-news-lake.name}.${digitalocean_spaces_bucket.reddit-news-lake.region}.digitaloceanspaces.com"
   }
+}
+
+output "airflow_snowflake_svc_public_key" {
+  value = tls_private_key.airflow_svc_key.public_key_pem
+}
+
+output "airflow_snowflake_svc_private_key" {
+  value     = tls_private_key.airflow_svc_key.private_key_pem
+  sensitive = true
 }

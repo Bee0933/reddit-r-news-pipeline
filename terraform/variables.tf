@@ -48,6 +48,19 @@ variable "snowflake_password" {
 
 variable "snowflake_role" {
   type        = string
-  default     = "ACCOUNTADMIN"
+  default     = "SECURITYADMIN"
   description = "Snowflake Warehouse role"
+}
+
+
+variable "snowflake_db_name" {
+  type        = string
+  default     = "REDDIT_DATABASE"
+  description = "Snowflake Database name for Reddit news"
+}
+
+variable "airflow_user_password" {
+  type        = string
+  description = "description"
+  sensitive   = true
 }

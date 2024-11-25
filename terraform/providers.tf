@@ -34,3 +34,8 @@ provider "snowflake" {
   organization_name = var.snowflake_org_name
   role              = var.snowflake_role
 }
+
+# provider "snowflake" {
+#   alias = "security_admin"
+#   role  = "SECURITYADMIN"
+# }

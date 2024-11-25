@@ -21,6 +21,19 @@ resource "digitalocean_reserved_ip" "airflow-reserved-ip" {
   region     = digitalocean_droplet.airflow-server-0.region
 }
 
+# DO domain for platform
+resource "digitalocean_domain" "dataops_domain" {
+  name = var.domain_name
+}
+
+# Add an A record to the domain for airflow
+resource "digitalocean_record" "www" {
+  domain = digitalocean_domain.dataops_domain.id
+  type   = "A"
+  name   = "airflow"
+  value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
+}
+
 # DigitalOcean Space bucket (S3) for reddit-r-news
 resource "digitalocean_spaces_bucket" "reddit-news-lake" {
   name   = "reddit-news-lake"

@@ -10,6 +10,13 @@ variable "ssh_key" {
   sensitive   = true
 }
 
+# domains & Network
+variable "domain_name" {
+  type        = string
+  description = "domain name for server"
+}
+
+
 variable "space_access_id" {
   type        = string
   description = "DO spaces access key"

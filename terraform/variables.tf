@@ -48,7 +48,7 @@ variable "snowflake_password" {
 
 variable "snowflake_role" {
   type        = string
-  default     = "SECURITYADMIN"
+  default     = "ACCOUNTADMIN"
   description = "Snowflake Warehouse role"
 }
 

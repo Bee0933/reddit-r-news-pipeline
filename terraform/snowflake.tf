@@ -2,8 +2,10 @@
 
 # Create Database
 resource "snowflake_database" "reddit_database" {
-  name    = var.snowflake_db_name
-  comment = "Database for Reddit API"
+  name         = var.snowflake_db_name
+  comment      = "Database for Reddit API"
+  is_transient = false
+  log_level    = "INFO"
 }
 
 ################## AIRFLOW ################
@@ -77,7 +79,6 @@ resource "snowflake_grant_privileges_to_account_role" "airflow_user_grant" {
     object_name = snowflake_user.airflow_user.name
   }
 }
-
 
 resource "snowflake_grant_account_role" "grants" {
   role_name = snowflake_account_role.airflow_role.name

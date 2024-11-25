@@ -1,0 +1,63 @@
+---
+- name: Install default and required packages
+  hosts: all
+  gather_facts: true
+  become: true
+  
+  tasks:
+    # Update and upgrade initial Linux packages
+    - name: Update and upgrade all available packages
+      when: upgrade_all_packages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist  # Perform a full upgrade (dist-upgrade)
+
+    # Install required packages
+    - name: Install common packages
+      ansible.builtin.apt:
+        name: 
+          - git
+          - nano
+          - htop
+          - gnupg
+          - build-essential
+          - python3
+          - python3-pip
+          - apache2-utils
+          - jq
+          - lz4
+          - aria2
+          - zstd
+          - iftop
+          - unzip
+          - sshpass
+        state: latest
+        update_cache: true
+
+    # Install Docker and Docker Compose
+    - name: Install Docker + Docker Compose
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+
+    - name: Install Docker Python wrapper
+      ansible.builtin.apt:
+        name: python3-docker
+        state: present
+
+    # Add Ansible user to Docker group
+    - name: Add ansible user to docker group
+      ansible.builtin.shell: "usermod -aG docker {{ bootstrap_user }}"
+
+    # Restart Docker service
+    - name: Reload service docker, in all cases
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+
+    # Schedule daily prune of Docker
+    - name: Schedule daily prune of Docker
+      when: docker_daily_prune
+      ansible.builtin.cron:
+        name: docker-prune
+        special_time: daily
+        job: 'docker system prune -af --filter "until=$((30*24))h"'

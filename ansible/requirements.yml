@@ -1,0 +1,9 @@
+# Install external roles from Ansible Galaxy.
+roles:
+  - name: geerlingguy.docker 
+    version: 4.1.1
+  # - name: geerlingguy.firewall 
+  #   version: 2.5.0
+
+collections:
+  - community.general

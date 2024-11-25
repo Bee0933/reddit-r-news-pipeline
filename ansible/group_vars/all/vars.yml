@@ -1,0 +1,11 @@
+####### BOOTSTRAP ########
+ansible_user: dataops
+initial_user: root
+bootstrap_user: dataops
+backup_user: dataops_backup
+github_pubkeys:
+  - Bee0933
+
+upgrade_all_packages: false
+docker_users: "{{bootstrap_user}}"
+docker_daily_prune: true

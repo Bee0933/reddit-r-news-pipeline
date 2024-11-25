@@ -1,0 +1,94 @@
+---
+- name: Setup initial bootstrap for server
+  hosts: all
+  gather_facts: false
+  become: true
+  
+  tasks:
+    # Set ansible remote user
+    - name: Set ansible_ssh_user
+      ansible.builtin.set_fact:
+        ansible_ssh_user: "{{ initial_user }}"
+      changed_when: false
+      delegate_to: localhost
+      run_once: true
+
+    # Create users and groups (backup user included)
+    - name: Create user groups for "{{ bootstrap_user }}" and "{{ backup_user }}"
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "{{ bootstrap_user }}"
+        - "{{ backup_user }}"
+
+    - name: Create user account for "{{ bootstrap_user }}" and add it to groups
+      ansible.builtin.user:
+        name: "{{ bootstrap_user }}"
+        groups: "{{ bootstrap_user }},sudo"
+        shell: /bin/bash
+        append: true
+
+    - name: Create user account for "{{ backup_user }}" and add it to groups
+      ansible.builtin.user:
+        name: "{{ backup_user }}"
+        groups: "{{ backup_user }},sudo"
+        shell: /bin/bash
+        append: true
+
+    # Add authorized SSH public keys
+    - name: Add SSH public keys to {{ bootstrap_user }} user
+      ansible.posix.authorized_key:
+        user: "{{ bootstrap_user }}"
+        state: present
+        key: "https://github.com/{{ item }}.keys"
+      loop: "{{ github_pubkeys }}"
+      when: not ansible_check_mode
+
+    - name: Add SSH public keys to {{ backup_user }} user
+      ansible.posix.authorized_key:
+        user: "{{ backup_user }}"
+        state: present
+        key: "https://github.com/{{ item }}.keys"
+      loop: "{{ github_pubkeys }}"
+      when: not ansible_check_mode
+
+    # Enable sudo privileges without password
+    - name: Allow users of {{ bootstrap_user }} group to sudo without a password
+      ansible.builtin.lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: "^%{{ bootstrap_user }}"
+        line: "%{{ bootstrap_user }} ALL=(ALL) NOPASSWD: ALL"
+
+    - name: Allow users of {{ backup_user }} group to sudo without a password
+      ansible.builtin.lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: "^%{{ backup_user }}"
+        line: "%{{ backup_user }} ALL=(ALL) NOPASSWD: ALL"
+
+    # Disable root user login with SSH & disable logins with password
+    - name: Disable root login over SSH
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify:
+        - restart sshd
+
+    - name: Disable password login
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify:
+        - restart sshd
+    
+  handlers:
+    - name: restart sshd
+      ansible.builtin.service:
+        name: ssh
+        state: restarted

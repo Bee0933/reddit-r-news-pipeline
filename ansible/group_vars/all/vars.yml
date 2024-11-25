@@ -18,3 +18,8 @@ airflow_src_dir: "../../airflow"
 airflow_dir: "{{ base_dir }}/airflow"
 airflow_user: dataops
 airflow_password: dataops
+
+# traefik
+traefik_airflow_mail: mailbox@mail.airflow.bestnyah.xyz
+traefik_airflow_host: airflow.bestnyah.xyz
+traefik_flower_host: flower.bestnyah.xyz

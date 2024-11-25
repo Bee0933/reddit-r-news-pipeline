@@ -15,10 +15,28 @@ resource "digitalocean_droplet" "airflow-server-0" {
   tags     = ["Airflow:DE"]
 }
 
+
+# Monitor Server droplet in the Frankfut region
+resource "digitalocean_droplet" "monitor-server-0" {
+  image  = "ubuntu-24-04-x64"
+  name   = "monitor-server-0"
+  region = "fra1"
+  size   = "s-2vcpu-4gb"
+
+  ssh_keys = [digitalocean_ssh_key.default.fingerprint]
+  tags     = ["Monitor:DE"]
+}
+
 # Airflow reserved IP
 resource "digitalocean_reserved_ip" "airflow-reserved-ip" {
   droplet_id = digitalocean_droplet.airflow-server-0.id
   region     = digitalocean_droplet.airflow-server-0.region
+}
+
+# Monitor Server reserved IP
+resource "digitalocean_reserved_ip" "monitor-server-reserved-ip" {
+  droplet_id = digitalocean_droplet.monitor-server-0.id
+  region     = digitalocean_droplet.monitor-server-0.region
 }
 
 # DO domain for platform
@@ -27,10 +45,18 @@ resource "digitalocean_domain" "dataops_domain" {
 }
 
 # Add an A record to the domain for airflow
-resource "digitalocean_record" "www" {
+resource "digitalocean_record" "airflow_record" {
   domain = digitalocean_domain.dataops_domain.id
   type   = "A"
   name   = "airflow"
+  value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
+}
+
+# Add an A record to the domain for flower
+resource "digitalocean_record" "flower_record" {
+  domain = digitalocean_domain.dataops_domain.id
+  type   = "A"
+  name   = "flower"
   value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
 }
 
@@ -48,7 +74,7 @@ resource "digitalocean_spaces_bucket_cors_configuration" "reddit-news-lake-cors-
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["PUT", "POST"]
-    allowed_origins = ["https://s3-website-test.hashicorp.com"]
+    allowed_origins = ["https://airflow.bestnyah.xyz"]
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }

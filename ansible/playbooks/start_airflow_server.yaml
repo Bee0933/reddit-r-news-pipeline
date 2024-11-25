@@ -15,6 +15,11 @@
       ansible.builtin.template:
         src: templates/.env.j2
         dest: "{{ airflow_dir }}/.env"
+    
+    - name: create traefik airflow conf from template
+      ansible.builtin.template:
+        src: templates/traefik.yml.j2
+        dest: "{{ airflow_dir }}/compose/prod/traefik/traefik.yml"
 
     - name: Build Docker Compose services
       command: docker compose -f docker-compose.yaml build

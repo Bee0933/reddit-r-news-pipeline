@@ -22,7 +22,7 @@ certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
     acme:
-      email: "mailbox@mail.airflow.bestnyah.xyz" 
+      email: "{{ traefik_airflow_mail }}" 
       storage: /etc/traefik/acme/acme.json
       # https://docs.traefik.io/master/https/acme/#httpchallenge
       httpChallenge:
@@ -31,7 +31,7 @@ certificatesResolvers:
 http:
   routers:
     web-secure-router:
-      rule: "Host(`airflow.bestnyah.xyz`)" 
+      rule: "Host(`{{ traefik_airflow_host }}`)" 
       entryPoints:
         - web-secure
       middlewares:
@@ -42,7 +42,7 @@ http:
         certResolver: letsencrypt
 
     flower-secure-router:
-      rule: "Host(`airflow.bestnyah.xyz`)" 
+      rule: "Host(`{{ traefik_flower_host }}`)" 
       entryPoints:
         - flower
       service: flower

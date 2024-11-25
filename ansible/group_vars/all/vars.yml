@@ -9,3 +9,12 @@ github_pubkeys:
 upgrade_all_packages: false
 docker_users: "{{bootstrap_user}}"
 docker_daily_prune: true
+
+base_dir: /home/{{ ansible_user }}
+
+
+# Airflow
+airflow_src_dir: "../../airflow"
+airflow_dir: "{{ base_dir }}/airflow"
+airflow_user: dataops
+airflow_password: dataops

@@ -1,0 +1,36 @@
+---
+- name: start Airflow server
+  hosts: airflow-server-0
+  gather_facts: true
+  become: true
+  
+  tasks:
+    - name: Copy airflow project folder
+      ansible.builtin.copy:
+        src: "{{ airflow_src_dir }}"
+        dest: "{{ base_dir }}"
+        remote_src: no
+    
+    - name: create airflow env from template
+      ansible.builtin.template:
+        src: templates/.env.j2
+        dest: "{{ airflow_dir }}/.env"
+
+    - name: Build Docker Compose services
+      command: docker compose -f docker-compose.yaml build
+      args:
+        chdir: "{{ airflow_dir }}"
+    
+    - name: Run the airflow-init service to migrate and seed the database
+      command: docker compose -f docker-compose.yaml up airflow-init
+      args:
+        chdir: "{{ airflow_dir }}"
+
+    - name: Pause for a few seconds to ensure airflow-init completes
+      pause:
+        seconds: 60
+    
+    - name: Run Airflow services in detached mode
+      command: docker compose -f docker-compose.yaml up -d
+      args:
+        chdir: "{{ airflow_dir }}"

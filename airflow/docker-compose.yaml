@@ -1,5 +1,4 @@
 ---
-version: '3'
 
 volumes:
   docker_sandbox_production_traefik: {}

@@ -1,0 +1,38 @@
+auth_enabled: false
+
+server:
+  http_listen_port: {{ loki_http_listen_port }}
+
+common:
+  path_prefix: {{loki_data_dir}}
+  storage:
+    filesystem:
+      chunks_directory: {{loki_data_dir}}/chunks
+      rules_directory: {{loki_data_dir}}/rules
+  replication_factor: 1
+  ring:
+    instance_addr: 0.0.0.0
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2024-11-09
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+limits_config:
+  deletion_mode: "filter-and-delete"
+  retention_period: 360h
+  allow_structured_metadata: false 
+
+compactor:
+  working_directory: {{loki_data_dir}}/compactor
+  delete_request_cancel_period: 10m 
+  retention_enabled: true 
+  retention_delete_delay: 2h
+  delete_request_store: filesystem 

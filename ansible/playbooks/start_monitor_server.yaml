@@ -71,47 +71,47 @@
           max-buffer-size: 4m
 
     # Loki
-    # - name: Create loki config dir
-    #   file:
-    #     path: "{{loki_dir}}"
-    #     state: directory
+    - name: Create loki config dir
+      file:
+        path: "{{loki_dir}}"
+        state: directory
 
-    # - name: Create Loki data directory
-    #   ansible.builtin.file:
-    #     path: "{{ loki_data_dir }}"
-    #     state: directory
-    #     mode: '0777'
+    - name: Create Loki data directory
+      ansible.builtin.file:
+        path: "{{ loki_data_dir }}"
+        state: directory
+        mode: '0777'
   
-    # - name: Create Loki rules directory
-    #   ansible.builtin.file:
-    #     path: "{{ loki_rules_directory }}"
-    #     state: directory
-    #     mode: '0777'
+    - name: Create Loki rules directory
+      ansible.builtin.file:
+        path: "{{ loki_rules_directory }}"
+        state: directory
+        mode: '0777'
 
-    # - name: Template config file
-    #   template:
-    #     src: templates/loki.yaml.j2
-    #     dest: "{{loki_dir}}/loki.yaml"
+    - name: Template config file
+      template:
+        src: templates/loki.yaml.j2
+        dest: "{{loki_dir}}/loki.yaml"
 
-    # - name: Start Loki
-    #   docker_container:
-    #     name: loki
-    #     state: started
-    #     image: "{{ loki_docker_image }}:{{loki_docker_version}}"
-    #     pull: true
-    #     command: "-config.file={{ loki_dir }}/loki.yaml -config.expand-env=true"
-    #     volumes:
-    #       - "{{loki_dir}}:{{loki_dir}}"
-    #       - "{{loki_data_dir}}:{{loki_data_dir}}"
-    #     restart_policy: unless-stopped
-    #     log_driver: json-file
-    #     log_options:
-    #       max-file: "10"
-    #       max-size: 30m
-    #       mode: non-blocking
-    #       max-buffer-size: 4m
-    #     ports:
-    #       - "{{ loki_http_listen_port }}:{{ loki_http_listen_port }}"  
+    - name: Start Loki
+      docker_container:
+        name: loki
+        state: started
+        image: "{{ loki_docker_image }}:{{loki_docker_version}}"
+        pull: true
+        command: "-config.file={{ loki_dir }}/loki.yaml -config.expand-env=true"
+        volumes:
+          - "{{loki_dir}}:{{loki_dir}}"
+          - "{{loki_data_dir}}:{{loki_data_dir}}"
+        restart_policy: unless-stopped
+        log_driver: json-file
+        log_options:
+          max-file: "10"
+          max-size: 30m
+          mode: non-blocking
+          max-buffer-size: 4m
+        ports:
+          - "{{ loki_http_listen_port }}:{{ loki_http_listen_port }}"  
 
     
     # Grafana

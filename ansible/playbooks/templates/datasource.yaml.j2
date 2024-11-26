@@ -26,10 +26,10 @@ datasources:
     version: 1
     editable: true
   
-  {# - name: Loki
+  - name: Loki
     type: loki
     access: proxy
     url: "http://{{ hostvars['monitor-server-0'].ansible_host }}:{{ loki_http_listen_port }}"
     jsonData:
       maxLines: 1000
-    editable: true #}
+    editable: true

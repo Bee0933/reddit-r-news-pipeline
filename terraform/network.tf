@@ -111,6 +111,13 @@ resource "digitalocean_firewall" "monitor-server-fw" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
+  # loki
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "3100"
+    source_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
   # grafana
   inbound_rule {
     protocol         = "tcp"
@@ -162,6 +169,13 @@ resource "digitalocean_firewall" "monitor-server-fw" {
   outbound_rule {
     protocol              = "tcp"
     port_range            = "9090"
+    destination_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
+  # loki
+  outbound_rule {
+    protocol              = "tcp"
+    port_range            = "3100"
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 

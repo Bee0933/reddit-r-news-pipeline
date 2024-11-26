@@ -48,6 +48,14 @@ rules_template: "rules.yml"
 target_group: "all"
 alertmanager_url: 127.0.0.1:{{alertmanager_web_port}}
 
+# Loki
+loki_dir: "/etc/loki"
+loki_data_dir: "/data/loki"
+loki_rules_directory: "/data/loki/rules"
+loki_docker_image: grafana/loki
+loki_docker_version: latest
+loki_http_listen_port: 3100
+
 # grafana
 grafana_image: "grafana/grafana-enterprise"
 grafana_image_tag: latest

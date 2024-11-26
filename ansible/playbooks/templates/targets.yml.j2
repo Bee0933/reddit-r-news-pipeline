@@ -1,0 +1,9 @@
+---
+- labels:
+    job: airflow-server
+    instance: "airflow-server-0"
+    project_name: "{{ prometheus_target_project_name }}"
+    client_name: "{{ hostvars['airflow-server-0'].client_name }}"
+  targets:
+    - "{{ hostvars['airflow-server-0'].ansible_host }}:{{ node_exporter_local_port }}"
+

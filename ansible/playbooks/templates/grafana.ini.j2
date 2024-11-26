@@ -1,0 +1,14 @@
+[security]
+admin_user = {{ grafana_admin_user }}
+admin_password = {{ grafana_admin_password }}
+
+[server]
+http_port = {{ grafana_port }}
+
+[paths]
+data = /var/lib/grafana
+logs = /var/log/grafana
+
+[log]
+mode = console
+level = info

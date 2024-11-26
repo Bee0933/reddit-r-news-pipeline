@@ -23,4 +23,7 @@ start-airflow: check-host-var
 
 start-metrics: check-host-var
 	ansible-playbook ./playbooks/start_metrics.yaml -l '$(HOSTS)'
+
+start-monitor: check-host-var
+	ansible-playbook ./playbooks/start_monitor_server.yaml -l '$(HOSTS)'
 	

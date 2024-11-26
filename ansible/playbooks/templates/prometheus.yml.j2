@@ -1,0 +1,21 @@
+# Rules and alerts are read from the specified file(s)
+rule_files:
+  - "{{ prometheus_config_container_dir }}/rules.yml"
+
+scrape_configs:
+  - job_name: "metrics"
+    honor_labels: true
+    # From: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+    scrape_interval: 24s
+    scrape_timeout: 24s
+
+    # IPs of the target nodes are created with a loop template
+    file_sd_configs:
+      - files:
+          - "{{ prometheus_config_container_dir }}/targets/*.yml"
+
+{# alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets: ["{{ hostvars['monitor-server-0'].ansible_host }}:{{ alertmanager_web_port }}"]  #}

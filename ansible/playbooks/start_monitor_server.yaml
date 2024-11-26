@@ -1,0 +1,234 @@
+---
+- name: start monitoring on server
+  hosts: monitor-server-0
+  gather_facts: true
+  become: true
+  
+  tasks:
+    - name: Create docker volume prometheus_data
+      community.docker.docker_volume:
+        name: prometheus_data
+
+    - name: Create prometheus_config_dir
+      ansible.builtin.file:
+        path: "{{ prometheus_config_dir }}"
+        state: directory
+
+    - name: Create prometheus targets dir
+      ansible.builtin.file:
+        path: "{{ prometheus_config_dir }}/targets"
+        state: directory
+
+    - name: Find target files
+      ansible.builtin.find:
+        paths: "{{ prometheus_config_dir }}/targets"
+        recurse: true
+      register: target_files
+
+    - name: Template prometheus targets files
+      ansible.builtin.template:
+        src: templates/targets.yml.j2
+        dest: "{{ prometheus_config_dir }}/targets/targets.yml"
+
+    - name: Copy prometheus config file
+      ansible.builtin.template:
+        src: templates/prometheus.yml.j2
+        dest: "{{ prometheus_config_dir }}/prometheus.yml"
+
+    - name: Copy prometheus rules file
+      ansible.builtin.copy:
+        src: templates/rules.yml
+        dest: "{{ prometheus_config_dir }}/rules.yml"
+        # validate: promtool check rules %s
+
+    - name: Start prometheus
+      community.docker.docker_container:
+        name: "{{ container_name_prometheus }}"
+        state: started
+        image: "{{ prometheus_container_imagename }}:{{ prometheus_container_image_tag }}"
+        pull: true
+        stop_timeout: 20
+
+        command: >
+          --config.file={{ prometheus_config_container_dir }}/prometheus.yml
+          --storage.tsdb.path=/prometheus
+          --web.listen-address="0.0.0.0:{{ prometheus_web_port }}"
+          --web.enable-lifecycle
+          --storage.tsdb.retention.time=30d
+
+        volumes:
+          - "{{ prometheus_config_dir }}:{{ prometheus_config_container_dir }}"
+          - prometheus_data:/prometheus
+
+        restart_policy: unless-stopped
+        ports:
+          - "{{ prometheus_web_port }}:{{ prometheus_web_port }}"
+        log_driver: json-file
+        log_options:
+          max-file: "10"
+          max-size: 30m
+          mode: non-blocking
+          max-buffer-size: 4m
+
+    # Loki
+    # - name: Create loki config dir
+    #   file:
+    #     path: "{{loki_dir}}"
+    #     state: directory
+
+    # - name: Create Loki data directory
+    #   ansible.builtin.file:
+    #     path: "{{ loki_data_dir }}"
+    #     state: directory
+    #     mode: '0777'
+  
+    # - name: Create Loki rules directory
+    #   ansible.builtin.file:
+    #     path: "{{ loki_rules_directory }}"
+    #     state: directory
+    #     mode: '0777'
+
+    # - name: Template config file
+    #   template:
+    #     src: templates/loki.yaml.j2
+    #     dest: "{{loki_dir}}/loki.yaml"
+
+    # - name: Start Loki
+    #   docker_container:
+    #     name: loki
+    #     state: started
+    #     image: "{{ loki_docker_image }}:{{loki_docker_version}}"
+    #     pull: true
+    #     command: "-config.file={{ loki_dir }}/loki.yaml -config.expand-env=true"
+    #     volumes:
+    #       - "{{loki_dir}}:{{loki_dir}}"
+    #       - "{{loki_data_dir}}:{{loki_data_dir}}"
+    #     restart_policy: unless-stopped
+    #     log_driver: json-file
+    #     log_options:
+    #       max-file: "10"
+    #       max-size: 30m
+    #       mode: non-blocking
+    #       max-buffer-size: 4m
+    #     ports:
+    #       - "{{ loki_http_listen_port }}:{{ loki_http_listen_port }}"  
+
+    
+    # Grafana
+    - name: Create multiple dependent directories for Grafana
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0777"
+      loop:
+        - "{{ grafana_data_dir }}"
+        - "{{ grafana_config_dir }}"
+        - "{{ grafana_provisioning_base_dir }}"
+        - "{{ provisoning_dashboard_dir }}"
+        - "{{ provisoning_datasource_dir }}"
+        - "{{ grafana_dashboards_dir }}"
+
+    - name: Create grafana.ini from template
+      ansible.builtin.template:
+        src: templates/grafana.ini.j2
+        dest: "{{ grafana_config_dir }}/grafana.ini"
+        owner: 472
+        group: 472
+        mode: "0644"
+    
+    - name: Create datasource from template
+      ansible.builtin.template:
+        src: templates/datasource.yaml.j2
+        dest: "{{ provisoning_datasource_dir }}/datasource.yaml"
+        owner: 472
+        group: 472
+        mode: "0644"
+    
+    - name: Create provisioning dashboard from template
+      ansible.builtin.template:
+        src: templates/dashboard.yaml
+        dest: "{{ provisoning_dashboard_dir }}/dashboard.yaml"
+        owner: 472
+        group: 472
+        mode: "0644"
+
+    - name: Copy dashboard file to destination
+      ansible.builtin.copy:
+        src: templates/data_metrics.json
+        dest: "{{ grafana_dashboards_dir }}/data_metrics.json"
+        owner: 472
+        group: 472
+        mode: "0644"
+
+    - name: Pull the Grafana Docker image
+      community.docker.docker_image:
+        name: "{{ grafana_image }}"
+        source: pull
+
+    - name: Run Grafana container
+      community.docker.docker_container:
+        name: "{{ grafana_container_name }}"
+        image: "{{ grafana_image }}:{{ grafana_image_tag }}"
+        state: started
+        restart_policy: unless-stopped
+        ports:
+          - "{{ grafana_port }}:{{ grafana_port }}"
+        volumes:
+          - "{{ grafana_data_dir }}:/var/lib/grafana"
+          - "{{ grafana_config_dir }}:/etc/grafana"
+          - "{{ grafana_provisioning_base_dir }}:/etc/grafana/provisioning"
+          - "{{ grafana_dashboards_dir }}/:/etc/grafana/provisioning/dashboard-definitions"
+        log_driver: "json-file"
+        log_options:
+          max-size: "100m"
+          max-file: "5"
+          mode: "non-blocking"
+        privileged: true
+    
+    # # Alert manager
+    # - name: Install deps
+    #   ansible.builtin.apt:
+    #     name: [prometheus-alertmanager]
+    #     state: latest
+    #     update_cache: true
+
+    # - name: Create docker volume alertmanager-data
+    #   community.docker.docker_volume:
+    #     name: alertmanager-data
+
+    # - name: Create alertmanager_config_dir
+    #   ansible.builtin.file:
+    #     path: "{{ alertmanager_config_dir }}"
+    #     state: directory
+
+    # - name: Copy Alertmanager config
+    #   ansible.builtin.template:
+    #     src: "templates/alertmanager.yml.j2"
+    #     dest: "{{ alertmanager_config_dir }}/alertmanager.yml"
+
+    # # - name: set-up alertmanager config
+    # #   include_tasks: update_alertmanager_rules.yml
+
+    # - name: Start alertmanager
+    #   community.docker.docker_container:
+    #     name: "{{ alertmanager_container_name }}"
+    #     state: started
+    #     image: prom/alertmanager
+    #     pull: true
+
+    #     command: >
+    #       --config.file=/config/alertmanager.yml --web.listen-address=":{{ alertmanager_web_port }}"
+
+    #     volumes:
+    #       - "{{ alertmanager_config_dir }}:/config"
+    #       - alertmanager-data:/data
+
+    #     restart_policy: unless-stopped
+    #     ports:
+    #       - "{{ alertmanager_web_port }}:{{ alertmanager_web_port }}"
+    #     log_driver: json-file
+    #     log_options:
+    #       max-file: "10"
+    #       max-size: 30m
+    #       mode: non-blocking
+    #       max-buffer-size: 4m

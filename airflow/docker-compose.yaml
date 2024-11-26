@@ -239,7 +239,7 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
+  
   traefik:
     build:
       context: .
@@ -248,9 +248,11 @@ services:
     depends_on:
       - airflow-webserver
     volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - docker_sandbox_production_traefik:/etc/traefik/acme:z
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
       - "0.0.0.0:5555:5555"
+      # - "0.0.0.0:9100:9100"
     restart: always

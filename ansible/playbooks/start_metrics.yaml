@@ -1,0 +1,33 @@
+---
+- name: start metrics on server
+  hosts: all
+  gather_facts: true
+  become: true
+  
+  tasks:
+    # run node exporter
+    - name: Run node_exporter container
+      community.docker.docker_container:
+        name: "{{ node_exporter_container_name }}"
+        image: "{{ node_exporter_container_image }}"
+        state: started
+        restart_policy: always
+        stop_timeout: "{{ node_exporter_container_stop_timeout }}"
+        ports:
+          - "{{ node_exporter_local_port }}:{{ node_exporter_local_port }}"  # Exposes the specified port
+        volumes: 
+          - /:/rootfs:ro
+          - /sys:/host/sys:ro
+          - /proc:/host/proc:ro
+        env: "{{ node_exporter_container_env }}"
+        # networks: "{{ node_exporter_container_networks }}"
+        command: 
+          - --path.procfs=/host/proc
+          - --path.rootfs=/rootfs
+          - --path.sysfs=/host/sys
+          - --collector.filesystem.ignored-mount-points
+          - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker)'
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.node-exporter.rule: "Path(`/metrics`)"
+          traefik.http.services.node-exporter.loadbalancer.server.port: "9100"

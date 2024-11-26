@@ -60,6 +60,14 @@ resource "digitalocean_record" "flower_record" {
   value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
 }
 
+# Add an A record to the domain for flower
+resource "digitalocean_record" "node_exporter_record" {
+  domain = digitalocean_domain.dataops_domain.id
+  type   = "A"
+  name   = "exporter"
+  value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
+}
+
 # DigitalOcean Space bucket (S3) for reddit-r-news
 resource "digitalocean_spaces_bucket" "reddit-news-lake" {
   name   = "reddit-news-lake"

@@ -1,6 +1,6 @@
 # source server firewall configs 
-resource "digitalocean_firewall" "src-server-fw" {
-  name = "source-server-firewall"
+resource "digitalocean_firewall" "airflow-server-fw" {
+  name = "airflow-server-firewall"
 
   droplet_ids = [digitalocean_droplet.airflow-server-0.id]
 
@@ -20,6 +20,13 @@ resource "digitalocean_firewall" "src-server-fw" {
   inbound_rule {
     protocol         = "tcp"
     port_range       = "443"
+    source_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
+  # node exporter
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "9100"
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
@@ -53,6 +60,13 @@ resource "digitalocean_firewall" "src-server-fw" {
   outbound_rule {
     protocol              = "tcp"
     port_range            = "443"
+    destination_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
+  # node exporter
+  outbound_rule {
+    protocol              = "tcp"
+    port_range            = "9100"
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 }

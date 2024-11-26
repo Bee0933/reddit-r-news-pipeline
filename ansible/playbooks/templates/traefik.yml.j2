@@ -18,9 +18,6 @@ entryPoints:
   flower:
     address: ":5555"
 
-  {# node-exporter:
-    address: ":9100" #}
-
 certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
@@ -53,12 +50,6 @@ http:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
 
-    {# node-exporter-router:
-      rule: "Host(`{{ traefik_node_exporter_host }}`)"
-      entryPoints:
-        - node-exporter
-      service: node-exporter #}
-
   middlewares:
     csrf:
       # https://docs.traefik.io/master/middlewares/headers/#hostsproxyheaders
@@ -76,11 +67,6 @@ http:
       loadBalancer:
         servers:
           - url: http://flower:5555
-
-    {# node-exporter:
-      loadBalancer:
-        servers:
-          - url: http://host.docker.internal:{{ node_exporter_local_port }} #}
 
 providers:
   # https://docs.traefik.io/master/providers/file/

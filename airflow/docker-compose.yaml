@@ -223,7 +223,7 @@ services:
   # or by explicitly targeted on the command line e.g. docker-compose up flower.
   # See: https://docs.docker.com/compose/profiles/
   flower:
-    <<: *airflow-common
+    image: apache/airflow:latest
     command: celery flower
     profiles:
       - flower
@@ -253,6 +253,4 @@ services:
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
-      - "0.0.0.0:5555:5555"
-      # - "0.0.0.0:9100:9100"
     restart: always

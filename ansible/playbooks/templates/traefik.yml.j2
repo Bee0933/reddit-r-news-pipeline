@@ -15,9 +15,6 @@ entryPoints:
     # https
     address: ":443"
 
-  flower:
-    address: ":5555"
-
 certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
@@ -44,7 +41,7 @@ http:
     flower-secure-router:
       rule: "Host(`{{ traefik_flower_host }}`)" 
       entryPoints:
-        - flower
+        - web-secure
       service: flower
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver

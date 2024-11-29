@@ -30,4 +30,3 @@
         labels:
           traefik.enable: "true"
           traefik.http.routers.node-exporter.rule: "Path(`/metrics`)"
-          traefik.http.services.node-exporter.loadbalancer.server.port: "9100"

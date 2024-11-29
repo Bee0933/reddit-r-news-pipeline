@@ -46,6 +46,17 @@ http:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
     
+    loki-secure-router:
+      rule: "Host(`{{ traefik_loki_host }}`)" 
+      entryPoints:
+        - websecure
+      middlewares:
+        - csrf
+      service: loki-server
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
+
     grafana-secure-router:
       rule: "Host(`{{ traefik_grafana_host }}`)" 
       entryPoints:
@@ -70,6 +81,11 @@ http:
         servers:
           - url: http://prometheus:9090
     
+    loki-server:
+      loadBalancer:
+        servers:
+          - url: http://loki:3100
+
     grafana-server:
       loadBalancer:
         servers:

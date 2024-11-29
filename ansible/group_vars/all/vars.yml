@@ -30,6 +30,7 @@ traefik_monitor_mail: mailbox@mail.monitor.bestnyah.xyz
 traefik_airflow_host: airfloww.bestnyah.xyz
 traefik_node_exporter_0_host: exporter0.bestnyah.xyz
 traefik_prometheus_host: prometheus.bestnyah.xyz
+traefik_loki_host: loki.bestnyah.xyz
 traefik_grafana_host: grafana.bestnyah.xyz
 
 

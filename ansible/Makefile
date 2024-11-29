@@ -30,6 +30,8 @@ start-monitor: check-host-var
 start-rev-proxy: check-host-var
 	ansible-playbook ./playbooks/start_reverse_proxy.yaml -l '$(HOSTS)'
 	
+order: 
+	@echo "bootstrap-server --> start-airflow --> start-rev-proxy --> start-monitor --> start-metrics"
 
 help:
 	@echo "Usage: make <target> HOSTS=<host-pattern>"

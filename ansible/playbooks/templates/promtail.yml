@@ -6,7 +6,7 @@ positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: http://{{ hostvars["monitor-server-0"].ansible_host }}:{{ loki_http_listen_port }}/loki/api/v1/push
+  - url: https://{{ traefik_loki_host }}/loki/api/v1/push
 
 # local machine logs
 

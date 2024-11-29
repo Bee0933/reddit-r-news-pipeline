@@ -116,7 +116,12 @@
           mode: non-blocking
           max-buffer-size: 4m
         ports:
-          - "{{ loki_http_listen_port }}:{{ loki_http_listen_port }}"  
+          - "{{ loki_http_listen_port }}:{{ loki_http_listen_port }}"
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.loki-http.entrypoints: "web"
+        networks:
+          - name: "traefik_{{ traefik_monitor_server_docker_network }}"  
 
     
     # Grafana

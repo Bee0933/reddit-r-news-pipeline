@@ -1,0 +1,21 @@
+---
+services:
+  traefik:
+    container_name: traefik-demo-1 
+    image: traefik:3.0.1
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml:ro
+      - traefik_vol:/etc/traefik/acme:z
+    networks:
+      - {{ traefik_monitor_server_docker_network }}
+    restart: unless-stopped
+
+volumes:
+  traefik_vol: {}
+networks:
+  {{ traefik_monitor_server_docker_network }}:

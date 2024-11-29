@@ -1,0 +1,31 @@
+---
+- name: start reverse proxy on monitor server
+  hosts: monitor-server-0
+  gather_facts: true
+  become: true
+  
+  tasks:
+    - name: Create traefik dir
+      ansible.builtin.file:
+        path: "{{ traefik_dir }}"
+        state: directory
+    
+    # - name: Create traefik config dir
+    #   ansible.builtin.file:
+    #     path: "{{ traefik_dir }}/config"
+    #     state: directory
+    
+    - name: Template traefik docker-compose file
+      ansible.builtin.template:
+        src: templates/traefik_docker_compose.yaml.j2
+        dest: "{{ traefik_dir }}/docker-compose.yaml"
+
+    - name: Template traefik config file
+      ansible.builtin.template:
+        src: templates/traefik_monitor.yml.j2
+        dest: "{{ traefik_dir }}/traefik.yml"
+
+    - name: Run traefik in detached mode
+      command: docker compose -f docker-compose.yaml up -d
+      args:
+        chdir: "{{ traefik_dir }}"

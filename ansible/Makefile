@@ -26,4 +26,7 @@ start-metrics: check-host-var
 
 start-monitor: check-host-var
 	ansible-playbook ./playbooks/start_monitor_server.yaml -l '$(HOSTS)'
+
+start-rev-proxy: check-host-var
+	ansible-playbook ./playbooks/start_reverse_proxy.yaml -l '$(HOSTS)'
 	

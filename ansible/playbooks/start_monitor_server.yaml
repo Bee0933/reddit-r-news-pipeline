@@ -69,6 +69,11 @@
           max-size: 30m
           mode: non-blocking
           max-buffer-size: 4m
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.prometheus-http.entrypoints: "web"
+        networks:
+          - name: "traefik_{{ traefik_monitor_server_docker_network }}"
 
     # Loki
     - name: Create loki config dir

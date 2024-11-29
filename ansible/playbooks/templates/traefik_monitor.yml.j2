@@ -1,0 +1,70 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+accessLog: {}
+
+log:
+  level: DEBUG
+
+api:
+  dashboard: true
+  insecure: true
+  debug: false
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: :443
+
+certificatesResolvers:
+  letsencrypt:
+    # https://docs.traefik.io/master/https/acme/#lets-encrypt
+    acme:
+      email: "{{ traefik_monitor_mail }}" 
+      storage: /etc/traefik/acme/acme.json
+      # https://docs.traefik.io/master/https/acme/#httpchallenge
+      httpChallenge:
+        entryPoint: web
+
+http:
+  routers:
+    prometheus-secure-router:
+      rule: "Host(`{{ traefik_prometheus_host }}`)" 
+      entryPoints:
+        - websecure
+      middlewares:
+        - csrf
+      service: prometheus-server
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
+
+  middlewares:
+    csrf:
+      # https://docs.traefik.io/master/middlewares/headers/#hostsproxyheaders
+      # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
+      headers:
+        hostsProxyHeaders: ["X-CSRFToken"]
+
+  services:
+    prometheus-server:
+      loadBalancer:
+        servers:
+          - url: http://prometheus:9090
+
+providers:
+  docker:
+    exposedByDefault: false
+    endpoint: 'unix:///var/run/docker.sock'
+    watch: true
+  file:
+    filename: /etc/traefik/traefik.yml
+    watch: true
+  

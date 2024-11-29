@@ -20,10 +20,15 @@ airflow_user: dataops
 airflow_password: dataops
 
 # traefik
-traefik_airflow_mail: mailbox@mail.airflow.bestnyah.xyz
-traefik_airflow_host: airflow.bestnyah.xyz
+traefik_dir: "{{ base_dir }}/traefik"
+traefik_image: traefik:3.0.1
+traefik_monitor_server_docker_container_name: traefik-monitor-server
+traefik_monitor_server_docker_network: confluent 
+traefik_airflow_mail: mailbox@mail.airfloww.bestnyah.xyz
+traefik_monitor_mail: mailbox@mail.monitor.bestnyah.xyz
+traefik_airflow_host: airfloww.bestnyah.xyz
 traefik_flower_host: flower.bestnyah.xyz
-# traefik_node_exporter_host: exporter.bestnyah.xyz
+traefik_prometheus_host: prometheus.bestnyah.xyz
 
 
 # Node Exporter

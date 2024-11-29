@@ -48,7 +48,7 @@ resource "digitalocean_domain" "dataops_domain" {
 resource "digitalocean_record" "airflow_record" {
   domain = digitalocean_domain.dataops_domain.id
   type   = "A"
-  name   = "airflow"
+  name   = "airfloww"
   value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
 }
 
@@ -60,12 +60,12 @@ resource "digitalocean_record" "flower_record" {
   value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
 }
 
-# Add an A record to the domain for flower
-resource "digitalocean_record" "node_exporter_record" {
+# Add an A record to the domain for prometheus
+resource "digitalocean_record" "prometheus_record" {
   domain = digitalocean_domain.dataops_domain.id
   type   = "A"
-  name   = "exporter"
-  value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
+  name   = "prometheus"
+  value  = digitalocean_reserved_ip.monitor-server-reserved-ip.ip_address
 }
 
 # DigitalOcean Space bucket (S3) for reddit-r-news

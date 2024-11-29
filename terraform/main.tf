@@ -52,14 +52,6 @@ resource "digitalocean_record" "airflow_record" {
   value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
 }
 
-# Add an A record to the domain for flower
-resource "digitalocean_record" "flower_record" {
-  domain = digitalocean_domain.dataops_domain.id
-  type   = "A"
-  name   = "flower"
-  value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
-}
-
 # Add an A record to the domain for node exporter 0
 resource "digitalocean_record" "node_exporter_0_record" {
   domain = digitalocean_domain.dataops_domain.id

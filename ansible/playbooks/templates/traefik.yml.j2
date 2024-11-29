@@ -37,12 +37,12 @@ http:
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
-
-    flower-secure-router:
-      rule: "Host(`{{ traefik_flower_host }}`)" 
+    
+    node-exporter-secure-router:
+      rule: "Host(`{{ traefik_node_exporter_0_host }}`)" 
       entryPoints:
         - web-secure
-      service: flower
+      service: exporter
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
@@ -59,13 +59,17 @@ http:
       loadBalancer:
         servers:
           - url: http://airflow-webserver:8080
-
-    flower:
+    
+    exporter:
       loadBalancer:
         servers:
-          - url: http://flower:5555
+          - url: http://node-exporter:9100
 
 providers:
+  docker:
+    exposedByDefault: false
+    endpoint: 'unix:///var/run/docker.sock'
+    watch: true
   # https://docs.traefik.io/master/providers/file/
   file:
     filename: /etc/traefik/traefik.yml

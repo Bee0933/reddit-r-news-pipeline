@@ -10,11 +10,6 @@
         path: "{{ traefik_dir }}"
         state: directory
     
-    # - name: Create traefik config dir
-    #   ansible.builtin.file:
-    #     path: "{{ traefik_dir }}/config"
-    #     state: directory
-    
     - name: Template traefik docker-compose file
       ansible.builtin.template:
         src: templates/traefik_docker_compose.yaml.j2

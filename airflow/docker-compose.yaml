@@ -1,5 +1,6 @@
 ---
-
+networks:
+  confluent:
 volumes:
   docker_sandbox_production_traefik: {}
   postgres-db-volume:
@@ -51,6 +52,8 @@ services:
       interval: 5s
       retries: 5
     restart: always
+    networks:
+      - confluent
 
   redis:
     image: redis:latest
@@ -62,6 +65,8 @@ services:
       timeout: 30s
       retries: 50
     restart: always
+    networks:
+      - confluent
 
   airflow-webserver:
     <<: *airflow-common
@@ -78,6 +83,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - confluent
 
   airflow-scheduler:
     <<: *airflow-common
@@ -92,6 +99,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - confluent
 
   airflow-worker:
     <<: *airflow-common
@@ -113,6 +122,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - confluent
 
   airflow-triggerer:
     <<: *airflow-common
@@ -127,6 +138,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - confluent
 
   airflow-init:
     <<: *airflow-common
@@ -205,6 +218,8 @@ services:
     user: "0:0"
     volumes:
       - .:/sources
+    networks:
+      - confluent
 
   airflow-cli:
     <<: *airflow-common
@@ -218,6 +233,8 @@ services:
       - bash
       - -c
       - airflow
+    networks:
+      - confluent
 
   # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
   # or by explicitly targeted on the command line e.g. docker-compose up flower.
@@ -239,6 +256,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - confluent
   
   traefik:
     build:
@@ -254,3 +273,5 @@ services:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
     restart: always
+    networks:
+      - confluent

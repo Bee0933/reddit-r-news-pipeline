@@ -40,8 +40,8 @@
       args:
         chdir: "{{ airflow_dir }}"
     
-    - name: Run the airflow-flower
-      command: docker-compose -f docker-compose.yaml up -d flower
-      args:
-        chdir: "{{ airflow_dir }}"
+    # - name: Run the airflow-flower
+    #   command: docker-compose -f docker-compose.yaml up -d flower
+    #   args:
+    #     chdir: "{{ airflow_dir }}"
         

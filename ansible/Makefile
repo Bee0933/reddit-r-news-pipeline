@@ -30,3 +30,17 @@ start-monitor: check-host-var
 start-rev-proxy: check-host-var
 	ansible-playbook ./playbooks/start_reverse_proxy.yaml -l '$(HOSTS)'
 	
+
+help:
+	@echo "Usage: make <target> HOSTS=<host-pattern>"
+	@echo ""
+	@echo "example:  make bootstrap-server HOSTS=airflow-server-0,monitor-server-0"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  install-requirements    Install Ansible Galaxy roles specified in requirements.yml."
+	@echo "  bootstrap-server        Run initial server setup and install default packages."
+	@echo "  start-airflow           Start the Airflow server on the specified hosts."
+	@echo "  start-metrics           Start the metrics monitoring services."
+	@echo "  start-monitor           Start the monitoring server on the specified hosts."
+	@echo "  start-rev-proxy         Start the reverse proxy server."
+	@echo "  help                    Display this help message."

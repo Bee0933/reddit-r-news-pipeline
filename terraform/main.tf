@@ -61,6 +61,14 @@ resource "digitalocean_record" "flower_record" {
 }
 
 # Add an A record to the domain for prometheus
+resource "digitalocean_record" "node_exporter_0_record" {
+  domain = digitalocean_domain.dataops_domain.id
+  type   = "A"
+  name   = "exporter0"
+  value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
+}
+
+# Add an A record to the domain for prometheus
 resource "digitalocean_record" "prometheus_record" {
   domain = digitalocean_domain.dataops_domain.id
   type   = "A"

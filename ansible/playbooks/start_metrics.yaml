@@ -20,7 +20,6 @@
           - /sys:/host/sys:ro
           - /proc:/host/proc:ro
         env: "{{ node_exporter_container_env }}"
-        # networks: "{{ node_exporter_container_networks }}"
         command: 
           - --path.procfs=/host/proc
           - --path.rootfs=/rootfs
@@ -29,4 +28,6 @@
           - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker)'
         labels:
           traefik.enable: "true"
-          traefik.http.routers.node-exporter.rule: "Path(`/metrics`)"
+          traefik.http.routers.exporter-http.entrypoints: "web"
+        networks:
+          - name: "airflow_{{ traefik_airflow_server_docker_network }}"

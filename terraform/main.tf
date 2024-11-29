@@ -68,6 +68,14 @@ resource "digitalocean_record" "prometheus_record" {
   value  = digitalocean_reserved_ip.monitor-server-reserved-ip.ip_address
 }
 
+# Add an A record to the domain for prometheus
+resource "digitalocean_record" "grafana_record" {
+  domain = digitalocean_domain.dataops_domain.id
+  type   = "A"
+  name   = "grafana"
+  value  = digitalocean_reserved_ip.monitor-server-reserved-ip.ip_address
+}
+
 # DigitalOcean Space bucket (S3) for reddit-r-news
 resource "digitalocean_spaces_bucket" "reddit-news-lake" {
   name   = "reddit-news-lake"

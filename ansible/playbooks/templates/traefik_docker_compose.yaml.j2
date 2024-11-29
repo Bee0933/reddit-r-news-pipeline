@@ -1,8 +1,8 @@
 ---
 services:
   traefik:
-    container_name: traefik-demo-1 
-    image: traefik:3.0.1
+    container_name: {{ traefik_monitor_server_docker_container_name }}
+    image: {{ traefik_image }}
     ports:
       - 80:80
       - 443:443

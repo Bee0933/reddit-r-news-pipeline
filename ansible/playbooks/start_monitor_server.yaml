@@ -189,6 +189,11 @@
           max-file: "5"
           mode: "non-blocking"
         privileged: true
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.grafana-http.entrypoints: "web"
+        networks:
+          - name: "traefik_{{ traefik_monitor_server_docker_network }}"
     
     # # Alert manager
     # - name: Install deps

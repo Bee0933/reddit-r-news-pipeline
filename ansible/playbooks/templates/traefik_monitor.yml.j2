@@ -45,6 +45,17 @@ http:
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
+    
+    grafana-secure-router:
+      rule: "Host(`{{ traefik_grafana_host }}`)" 
+      entryPoints:
+        - websecure
+      middlewares:
+        - csrf
+      service: grafana-server
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
 
   middlewares:
     csrf:
@@ -58,6 +69,11 @@ http:
       loadBalancer:
         servers:
           - url: http://prometheus:9090
+    
+    grafana-server:
+      loadBalancer:
+        servers:
+          - url: http://grafana:3000
 
 providers:
   docker:

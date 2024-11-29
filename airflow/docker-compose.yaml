@@ -37,6 +37,10 @@ x-airflow-common:
       condition: service_healthy
     postgres:
       condition: service_healthy
+  labels:
+          promtail_logging: "true"
+          scrape_location: "airflow"
+          client_name: "airflow-svc"
 
 services:
   postgres:
@@ -54,6 +58,10 @@ services:
     restart: always
     networks:
       - confluent
+    labels:
+          promtail_logging: "true"
+          scrape_location: "airflow"
+          client_name: "airflow-svc"
 
   redis:
     image: redis:latest
@@ -67,6 +75,10 @@ services:
     restart: always
     networks:
       - confluent
+    labels:
+          promtail_logging: "true"
+          scrape_location: "airflow"
+          client_name: "airflow-svc"
 
   airflow-webserver:
     <<: *airflow-common

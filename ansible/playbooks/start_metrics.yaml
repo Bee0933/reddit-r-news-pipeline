@@ -5,6 +5,16 @@
   become: true
   
   tasks:
+    - name: Create Promtail dir
+      file:
+        path: "{{promtail_dir}}"
+        state: directory
+
+    - name: Promtail config file
+      template:
+        src: templates/promtail.yml
+        dest: "{{promtail_config_file_path}}"
+
     # run node exporter
     - name: Run node_exporter container
       community.docker.docker_container:
@@ -29,5 +39,33 @@
         labels:
           traefik.enable: "true"
           traefik.http.routers.exporter-http.entrypoints: "web"
+        networks:
+          - name: "airflow_{{ traefik_airflow_server_docker_network }}"
+    
+    # start promptail
+    - name: Start Promtail
+      docker_container:
+        name: promtail
+        state: started
+        image: "{{ promtail_docker_imagename }}:{{promtail_docker_version}}"
+        labels:
+          promtail_logging: "true"
+        pull: true
+        command: "-config.file={{ promtail_config_file_path }}"
+        volumes:
+          - "{{promtail_dir}}:{{promtail_dir}}"
+          - "/var/log:/var/log"
+          - /var/lib/docker/containers:/var/lib/docker/containers:ro
+          - /var/run/docker.sock:/var/run/docker.sock
+        restart_policy: always
+        restart: true
+        published_ports:
+          - "{{ promtail_http_listen_port }}:{{ promtail_http_listen_port }}"  
+        log_driver: json-file
+        log_options:
+          max-file: "10"
+          max-size: 30m
+          mode: non-blocking
+          max-buffer-size: 4m
         networks:
           - name: "airflow_{{ traefik_airflow_server_docker_network }}"

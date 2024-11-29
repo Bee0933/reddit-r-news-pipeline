@@ -40,6 +40,16 @@ node_exporter_container_env: {}
 node_exporter_local_port: 9100
 node_exporter_container_stop_timeout: "30"
 
+# promtail
+promtail_dir: "/etc/promtail"
+promtail_config_file_path: "{{promtail_dir}}/promtail.yml"
+promtail_docker_imagename: grafana/promtail
+promtail_docker_version: 2.8.8
+promtail_http_listen_port: 9080
+promtail_gRPC_port: 36543
+loki_basic_auth_user: "dataops"
+loki_basic_auth_password: "dataops"
+
 # prometheus
 container_name_prometheus: prometheus
 prometheus_container_imagename: prom/prometheus

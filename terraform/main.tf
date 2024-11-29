@@ -60,7 +60,7 @@ resource "digitalocean_record" "flower_record" {
   value  = digitalocean_reserved_ip.airflow-reserved-ip.ip_address
 }
 
-# Add an A record to the domain for prometheus
+# Add an A record to the domain for node exporter 0
 resource "digitalocean_record" "node_exporter_0_record" {
   domain = digitalocean_domain.dataops_domain.id
   type   = "A"
@@ -76,7 +76,15 @@ resource "digitalocean_record" "prometheus_record" {
   value  = digitalocean_reserved_ip.monitor-server-reserved-ip.ip_address
 }
 
-# Add an A record to the domain for prometheus
+# Add an A record to the domain for loki
+resource "digitalocean_record" "loki_record" {
+  domain = digitalocean_domain.dataops_domain.id
+  type   = "A"
+  name   = "loki"
+  value  = digitalocean_reserved_ip.monitor-server-reserved-ip.ip_address
+}
+
+# Add an A record to the domain for grafana
 resource "digitalocean_record" "grafana_record" {
   domain = digitalocean_domain.dataops_domain.id
   type   = "A"

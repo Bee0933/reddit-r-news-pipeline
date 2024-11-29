@@ -23,12 +23,12 @@ resource "digitalocean_firewall" "airflow-server-fw" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # # node exporter
-  # inbound_rule {
-  #   protocol         = "tcp"
-  #   port_range       = "9100"
-  #   source_addresses = ["0.0.0.0/0", "::/0"]
-  # }
+  # loki
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "3100"
+    source_addresses = ["0.0.0.0/0", "::/0"]
+  }
 
   inbound_rule {
     protocol         = "icmp"
@@ -63,12 +63,12 @@ resource "digitalocean_firewall" "airflow-server-fw" {
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # # node exporter
-  # outbound_rule {
-  #   protocol              = "tcp"
-  #   port_range            = "9100"
-  #   destination_addresses = ["0.0.0.0/0", "::/0"]
-  # }
+  # loki
+  outbound_rule {
+    protocol              = "tcp"
+    port_range            = "3100"
+    destination_addresses = ["0.0.0.0/0", "::/0"]
+  }
 }
 
 
@@ -104,12 +104,12 @@ resource "digitalocean_firewall" "monitor-server-fw" {
   #   source_addresses = ["0.0.0.0/0", "::/0"]
   # }
 
-  # prometheus
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "9090"
-    source_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # prometheus
+  # inbound_rule {
+  #   protocol         = "tcp"
+  #   port_range       = "9090"
+  #   source_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 
   # loki
   inbound_rule {
@@ -165,12 +165,12 @@ resource "digitalocean_firewall" "monitor-server-fw" {
   #   destination_addresses = ["0.0.0.0/0", "::/0"]
   # }
 
-  # prometheus
-  outbound_rule {
-    protocol              = "tcp"
-    port_range            = "9090"
-    destination_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # prometheus
+  # outbound_rule {
+  #   protocol              = "tcp"
+  #   port_range            = "9090"
+  #   destination_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 
   # loki
   outbound_rule {

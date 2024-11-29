@@ -12,7 +12,7 @@ datasources:
     type: prometheus
     access: proxy
     orgId: 1
-    url: "http://{{ hostvars['monitor-server-0'].ansible_host }}:{{ prometheus_web_port }}"
+    url: "https://{{ traefik_prometheus_host }}"
     basicAuth: false
     isDefault: true
     jsonData:

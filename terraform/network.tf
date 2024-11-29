@@ -23,12 +23,12 @@ resource "digitalocean_firewall" "airflow-server-fw" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # node exporter
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "9100"
-    source_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # node exporter
+  # inbound_rule {
+  #   protocol         = "tcp"
+  #   port_range       = "9100"
+  #   source_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 
   inbound_rule {
     protocol         = "icmp"
@@ -63,12 +63,12 @@ resource "digitalocean_firewall" "airflow-server-fw" {
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # node exporter
-  outbound_rule {
-    protocol              = "tcp"
-    port_range            = "9100"
-    destination_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # node exporter
+  # outbound_rule {
+  #   protocol              = "tcp"
+  #   port_range            = "9100"
+  #   destination_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 }
 
 
@@ -97,12 +97,12 @@ resource "digitalocean_firewall" "monitor-server-fw" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # node exporter
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "9100"
-    source_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # node exporter
+  # inbound_rule {
+  #   protocol         = "tcp"
+  #   port_range       = "9100"
+  #   source_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 
   # prometheus
   inbound_rule {
@@ -118,12 +118,12 @@ resource "digitalocean_firewall" "monitor-server-fw" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # grafana
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "3000"
-    source_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # grafana
+  # inbound_rule {
+  #   protocol         = "tcp"
+  #   port_range       = "3000"
+  #   source_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 
   inbound_rule {
     protocol         = "icmp"
@@ -158,12 +158,12 @@ resource "digitalocean_firewall" "monitor-server-fw" {
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # node exporter
-  outbound_rule {
-    protocol              = "tcp"
-    port_range            = "9100"
-    destination_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # node exporter
+  # outbound_rule {
+  #   protocol              = "tcp"
+  #   port_range            = "9100"
+  #   destination_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 
   # prometheus
   outbound_rule {
@@ -179,10 +179,10 @@ resource "digitalocean_firewall" "monitor-server-fw" {
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 
-  # grafana
-  outbound_rule {
-    protocol              = "tcp"
-    port_range            = "3000"
-    destination_addresses = ["0.0.0.0/0", "::/0"]
-  }
+  # # grafana
+  # outbound_rule {
+  #   protocol              = "tcp"
+  #   port_range            = "3000"
+  #   destination_addresses = ["0.0.0.0/0", "::/0"]
+  # }
 }

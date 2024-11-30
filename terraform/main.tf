@@ -68,6 +68,14 @@ resource "digitalocean_record" "prometheus_record" {
   value  = digitalocean_reserved_ip.monitor-server-reserved-ip.ip_address
 }
 
+# Add an A record to the domain for alert manager
+resource "digitalocean_record" "alertmanager_record" {
+  domain = digitalocean_domain.dataops_domain.id
+  type   = "A"
+  name   = "alertmanager"
+  value  = digitalocean_reserved_ip.monitor-server-reserved-ip.ip_address
+}
+
 # Add an A record to the domain for loki
 resource "digitalocean_record" "loki_record" {
   domain = digitalocean_domain.dataops_domain.id

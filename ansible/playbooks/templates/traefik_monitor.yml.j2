@@ -45,6 +45,17 @@ http:
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
+
+    alertmanager-secure-router:
+      rule: "Host(`{{ traefik_alertmanager_host }}`)" 
+      entryPoints:
+        - websecure
+      middlewares:
+        - csrf
+      service: alertmanager-server
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
     
     loki-secure-router:
       rule: "Host(`{{ traefik_loki_host }}`)" 
@@ -80,6 +91,11 @@ http:
       loadBalancer:
         servers:
           - url: http://prometheus:9090
+
+    alertmanager-server:
+      loadBalancer:
+        servers:
+          - url: http://alertmanager:9095
     
     loki-server:
       loadBalancer:

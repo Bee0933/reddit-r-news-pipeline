@@ -200,50 +200,52 @@
         networks:
           - name: "traefik_{{ traefik_monitor_server_docker_network }}"
     
-    # # Alert manager
-    # - name: Install deps
-    #   ansible.builtin.apt:
-    #     name: [prometheus-alertmanager]
-    #     state: latest
-    #     update_cache: true
+    # Alert manager
+    - name: Install deps
+      ansible.builtin.apt:
+        name: [prometheus-alertmanager]
+        state: latest
+        update_cache: true
 
-    # - name: Create docker volume alertmanager-data
-    #   community.docker.docker_volume:
-    #     name: alertmanager-data
+    - name: Create docker volume alertmanager-data
+      community.docker.docker_volume:
+        name: alertmanager-data
 
-    # - name: Create alertmanager_config_dir
-    #   ansible.builtin.file:
-    #     path: "{{ alertmanager_config_dir }}"
-    #     state: directory
+    - name: Create alertmanager_config_dir
+      ansible.builtin.file:
+        path: "{{ alertmanager_config_dir }}"
+        state: directory
 
-    # - name: Copy Alertmanager config
-    #   ansible.builtin.template:
-    #     src: "templates/alertmanager.yml.j2"
-    #     dest: "{{ alertmanager_config_dir }}/alertmanager.yml"
+    - name: Copy Alertmanager config
+      ansible.builtin.template:
+        src: "templates/alertmanager.yml.j2"
+        dest: "{{ alertmanager_config_dir }}/alertmanager.yml"
 
-    # # - name: set-up alertmanager config
-    # #   include_tasks: update_alertmanager_rules.yml
+    - name: Start alertmanager
+      community.docker.docker_container:
+        name: "{{ alertmanager_container_name }}"
+        state: started
+        image: prom/alertmanager
+        pull: true
 
-    # - name: Start alertmanager
-    #   community.docker.docker_container:
-    #     name: "{{ alertmanager_container_name }}"
-    #     state: started
-    #     image: prom/alertmanager
-    #     pull: true
+        command: >
+          --config.file=/config/alertmanager.yml --web.listen-address=":{{ alertmanager_web_port }}"
 
-    #     command: >
-    #       --config.file=/config/alertmanager.yml --web.listen-address=":{{ alertmanager_web_port }}"
+        volumes:
+          - "{{ alertmanager_config_dir }}:/config"
+          - alertmanager-data:/data
 
-    #     volumes:
-    #       - "{{ alertmanager_config_dir }}:/config"
-    #       - alertmanager-data:/data
-
-    #     restart_policy: unless-stopped
-    #     ports:
-    #       - "{{ alertmanager_web_port }}:{{ alertmanager_web_port }}"
-    #     log_driver: json-file
-    #     log_options:
-    #       max-file: "10"
-    #       max-size: 30m
-    #       mode: non-blocking
-    #       max-buffer-size: 4m
+        restart_policy: unless-stopped
+        ports:
+          - "{{ alertmanager_web_port }}:{{ alertmanager_web_port }}"
+        log_driver: json-file
+        log_options:
+          max-file: "10"
+          max-size: 30m
+          mode: non-blocking
+          max-buffer-size: 4m
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.alertmanager-http.entrypoints: "web"
+        networks:
+          - name: "traefik_{{ traefik_monitor_server_docker_network }}"

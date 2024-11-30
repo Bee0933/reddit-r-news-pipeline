@@ -30,6 +30,7 @@ traefik_monitor_mail: mailbox@mail.monitor.bestnyah.xyz
 traefik_airflow_host: airfloww.bestnyah.xyz
 traefik_node_exporter_0_host: exporter0.bestnyah.xyz
 traefik_prometheus_host: prometheus.bestnyah.xyz
+traefik_alertmanager_host: alertmanager.bestnyah.xyz
 traefik_loki_host: loki.bestnyah.xyz
 traefik_grafana_host: grafana.bestnyah.xyz
 
@@ -65,6 +66,17 @@ target_template: "targets.yml"
 rules_template: "rules.yml"
 target_group: "all"
 alertmanager_url: 127.0.0.1:{{alertmanager_web_port}}
+
+# alert manager
+alertmanager_container_name: alertmanager
+alertmanager_image_tag: latest
+alertmanager_web_port: 9095
+alert_manager_home_dir_default: /home/{{bootstrap_user}}
+alertmanager_config_dir: "{{ alert_manager_home_dir_default }}/alertmanager"
+alertmanager_config_file: "alertmanager.yml"
+alertmanager_rule_template: "alertmanager.yml"
+slack_wehbook: "https://hooks.slack.com/services/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"
+slack_channel: "#platform-alerts"
 
 # Loki
 loki_dir: "/etc/loki"

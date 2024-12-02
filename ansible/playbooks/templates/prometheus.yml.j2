@@ -5,6 +5,11 @@ rule_files:
 scrape_configs:
   - job_name: "metrics"
     honor_labels: true
+
+    basic_auth:
+      username: "{{ traefik_basic_auth_user }}"
+      password: "{{ traefik_basic_auth_password }}"
+
     # From: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
     scrape_interval: 24s
     scrape_timeout: 24s
@@ -13,6 +18,7 @@ scrape_configs:
     file_sd_configs:
       - files:
           - "{{ prometheus_config_container_dir }}/targets/*.yml"
+  
 
 alerting:
   alertmanagers:

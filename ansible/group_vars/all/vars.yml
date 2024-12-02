@@ -33,6 +33,9 @@ traefik_prometheus_host: prometheus.bestnyah.xyz
 traefik_alertmanager_host: alertmanager.bestnyah.xyz
 traefik_loki_host: loki.bestnyah.xyz
 traefik_grafana_host: grafana.bestnyah.xyz
+traefik_basic_auth_user: "dataops"
+traefik_basic_auth_password: "dataops"
+traefik_basic_auth_encrypt_password: "$2y$05$cMZrdRrLS2OaF7oCrvNqaOq3.WaKXwW2H24RIIlZkYR4LnwnfDyFK"
 
 
 # Node Exporter

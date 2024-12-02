@@ -41,6 +41,7 @@ http:
         - websecure
       middlewares:
         - csrf
+        - basic-auth
       service: prometheus-server
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
@@ -63,6 +64,7 @@ http:
         - websecure
       middlewares:
         - csrf
+        - basic-auth
       service: loki-server
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
@@ -85,6 +87,11 @@ http:
       # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
       headers:
         hostsProxyHeaders: ["X-CSRFToken"]
+    
+    basic-auth:
+      basicauth:
+        users:
+          - "{{ traefik_basic_auth_user }}:{{ traefik_basic_auth_encrypt_password }}"
 
   services:
     prometheus-server:

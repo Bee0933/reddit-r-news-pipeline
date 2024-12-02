@@ -13,13 +13,15 @@ datasources:
     access: proxy
     orgId: 1
     url: "https://{{ traefik_prometheus_host }}"
-    basicAuth: false
+    basicAuth: true
+    basicAuthUser: "{{ traefik_basic_auth_user }}"
     isDefault: true
     jsonData:
       graphiteVersion: "1.1"
       tlsAuth: false
       tlsAuthWithCACert: false
     secureJsonData:
+      basicAuthPassword: "{{ traefik_basic_auth_password }}"
       tlsCACert: "..."
       tlsClientCert: "..."
       tlsClientKey: "..."
@@ -30,6 +32,10 @@ datasources:
     type: loki
     access: proxy
     url: "http://{{ traefik_loki_host }}"
+    basicAuth: true 
+    basicAuthUser: "{{ traefik_basic_auth_user }}"
     jsonData:
       maxLines: 1000
     editable: true
+    secureJsonData:
+      basicAuthPassword: "{{ traefik_basic_auth_password }}"

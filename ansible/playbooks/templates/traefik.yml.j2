@@ -42,6 +42,9 @@ http:
       rule: "Host(`{{ traefik_node_exporter_0_host }}`)" 
       entryPoints:
         - web-secure
+      middlewares:
+        - csrf
+        - basic-auth
       service: exporter
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
@@ -53,6 +56,11 @@ http:
       # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
       headers:
         hostsProxyHeaders: ["X-CSRFToken"]
+    
+    basic-auth:
+      basicauth:
+        users:
+          - "{{ traefik_basic_auth_user }}:{{ traefik_basic_auth_encrypt_password }}"
 
   services:
     airflow-webserver:

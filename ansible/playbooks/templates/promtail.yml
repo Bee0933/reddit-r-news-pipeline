@@ -7,6 +7,9 @@ positions:
 
 clients:
   - url: https://{{ traefik_loki_host }}/loki/api/v1/push
+    basic_auth:
+      username: "{{ traefik_basic_auth_user }}"
+      password: "{{ traefik_basic_auth_password }}"
 
 # local machine logs
 

@@ -81,3 +81,6 @@ collections/.cache
 collections/ansible_collections/*/*/.git
 collections/ansible_collections/*/*/.retry
 collections/ansible_collections/*/*/*.log
+
+# python
+venv

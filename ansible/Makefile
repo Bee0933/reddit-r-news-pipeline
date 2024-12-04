@@ -29,7 +29,10 @@ start-monitor: check-host-var
 
 start-rev-proxy: check-host-var
 	ansible-playbook ./playbooks/start_reverse_proxy.yaml -l '$(HOSTS)'
-	
+
+update-dags: check-host-var
+	ansible-playbook ./playbooks/update_dags.yaml -l '$(HOSTS)'	
+
 order: 
 	@echo "bootstrap-server --> start-airflow --> start-rev-proxy --> start-monitor --> start-metrics"
 
@@ -45,4 +48,5 @@ help:
 	@echo "  start-metrics           Start the metrics monitoring services."
 	@echo "  start-monitor           Start the monitoring server on the specified hosts."
 	@echo "  start-rev-proxy         Start the reverse proxy server."
+	@echo "  update-dags         	  Update Airflow DAG's"
 	@echo "  help                    Display this help message."

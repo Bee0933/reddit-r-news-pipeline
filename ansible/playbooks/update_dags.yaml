@@ -1,0 +1,12 @@
+---
+- name: Update Airflow DAG's
+  hosts: airflow-server-0
+  gather_facts: true
+  become: true
+  
+  tasks:
+    - name: Copy updates from airflow folder
+      ansible.builtin.copy:
+        src: "{{ airflow_src_dir }}"
+        dest: "{{ base_dir }}"
+        remote_src: no

@@ -8,7 +8,7 @@ from pipelines.reddit import (
     RedditAPISensor,
     fetch_latest_posts,
     upload_to_s3,
-    transform_data,
+    transform_reddit_data,
 )
 
 # aiflow defaut args
@@ -54,7 +54,7 @@ with DAG(
     # Task 4: Transform data with Pandas
     transform_data_task = PythonOperator(
         task_id="transform_data",
-        python_callable=transform_data,
+        python_callable=transform_reddit_data,
     )
 
     # Task dependencies

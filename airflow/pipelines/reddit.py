@@ -117,7 +117,7 @@ def upload_to_s3(**kwargs):
     print(f"File uploaded to s3://{S3_BUCKET}/{s3_key}")
 
 
-def transform_data(**kwargs):
+def transform_reddit_data(**kwargs):
     ti = kwargs["ti"]
     raw_data = ti.xcom_pull(key="raw_data", task_ids="fetch_reddit_posts")
     if not raw_data:
@@ -134,9 +134,14 @@ def transform_data(**kwargs):
     df["author"] = df["author"].fillna("Unknown Author")  
     df.drop_duplicates(subset=["id"], inplace=True) 
     df["created_utc"] = pd.to_datetime(df["created_utc"])  
-    df["created_utc"] = df["created_utc"].astype(str)
+    df["created_utc"] = df["created_utc"].dt.date
     df = df[df["over_18"] == False]
 
-    
-    ti.xcom_push(key="transformed_data", value=df.to_dict(orient="records"))
-    print("Transformed data pushed to XCom.")
+    current_time = datetime.now()
+    formatted_time = current_time.strftime("%Y-%m-%d-%H:%M:%S")
+    save_fmt = f"r_worldnews_{formatted_time}.parquet"
+
+    tmp_path=f"/tmp/{save_fmt}"
+    df.to_parquet(tmp_path, engine='pyarrow')  # or 'fastparquet'
+    ti.xcom_push(key="transformed_parquet_file_path", value=tmp_path)
+    print(f"Transformed Parquet file saved at {tmp_path}, and path pushed to XCom.")

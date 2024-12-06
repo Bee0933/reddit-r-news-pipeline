@@ -18,7 +18,7 @@ airflow_src_dir: "../../airflow"
 airflow_dir: "{{ base_dir }}/airflow"
 airflow_user: dataops
 airflow_password: dataops
-additional_pip_requirements: "praw boto3 pandas fastparquet"
+additional_pip_requirements: "praw boto3 pandas fastparquet snowflake-sqlalchemy"
 
 # traefik
 traefik_dir: "{{ base_dir }}/traefik"

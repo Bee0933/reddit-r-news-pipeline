@@ -23,11 +23,11 @@ output "spaces_bucket_details" {
   }
 }
 
-output "airflow_snowflake_svc_public_key" {
-  value = tls_private_key.airflow_svc_key.public_key_pem
-}
+# output "airflow_snowflake_svc_public_key" {
+#   value = tls_private_key.airflow_svc_key.public_key_pem
+# }
 
-output "airflow_snowflake_svc_private_key" {
-  value     = tls_private_key.airflow_svc_key.private_key_pem
-  sensitive = true
-}
+# output "airflow_snowflake_svc_private_key" {
+#   value     = tls_private_key.airflow_svc_key.private_key_pem
+#   sensitive = true
+# }

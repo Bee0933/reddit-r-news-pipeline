@@ -10,6 +10,7 @@ from pipelines.reddit import (
     upload_to_s3,
     transform_reddit_data,
 )
+from pipelines.snowflake import load_snowflake
 
 # aiflow defaut args
 default_args = {
@@ -17,8 +18,8 @@ default_args = {
     "depends_on_past": False,
     "email_on_failure": False,
     "email_on_retry": False,
-    "retries": 1,
-    "retry_delay": timedelta(minutes=5),
+    "retries": 3,
+    "retry_delay": timedelta(minutes=3),
 }
 
 
@@ -57,10 +58,17 @@ with DAG(
         python_callable=transform_reddit_data,
     )
 
+    load_to_snowflake = PythonOperator(
+        task_id="load_to_snowflake",
+        python_callable=load_snowflake,
+        provide_context=True,
+    )
+
     # Task dependencies
     (
         wait_for_reddit_api
         >> fetch_reddit_posts
         >> upload_to_s3_task
         >> transform_data_task
+        >> load_to_snowflake
     )

@@ -8,6 +8,11 @@ resource "snowflake_database" "reddit_database" {
   log_level    = "INFO"
 }
 
+# create schema
+resource "snowflake_schema" "reddit_schema" {
+  name     = var.reddit_schema_name
+  database = snowflake_database.reddit_database.name
+}
 ################## AIRFLOW ################
 
 # Create airflow Role
@@ -26,10 +31,19 @@ resource "snowflake_grant_privileges_to_account_role" "airflow_database_grant" {
   }
 }
 
-# Grant access all schema in DB to Airflow Role
-resource "snowflake_grant_privileges_to_account_role" "airflow_schema_grant" {
-  privileges        = ["MODIFY", "CREATE TABLE"]
+# Grant schema USAGE to Airflow Role
+resource "snowflake_grant_privileges_to_account_role" "airflow_schema_usage_grant" {
+  privileges        = ["USAGE", "MODIFY", "CREATE TABLE"]
   account_role_name = snowflake_account_role.airflow_role.name
+  on_schema {
+    all_schemas_in_database = snowflake_database.reddit_database.name
+  }
+}
+
+# Grant access all schema in DB to Account Admin Role
+resource "snowflake_grant_privileges_to_account_role" "accountadmin_schema_grant" {
+  privileges        = ["USAGE", "MODIFY", "CREATE TABLE"]
+  account_role_name = "ACCOUNTADMIN"
   on_schema {
     all_schemas_in_database = snowflake_database.reddit_database.name
   }
@@ -55,19 +69,13 @@ resource "snowflake_grant_privileges_to_account_role" "airflow_warehouse_grant" 
   }
 }
 
-# tls key for airflow
-resource "tls_private_key" "airflow_svc_key" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
-
 # create airflow user
 resource "snowflake_user" "airflow_user" {
   name              = "AIRFLOW_USER"
   default_warehouse = snowflake_warehouse.airflow_warehouse.name
   default_role      = snowflake_account_role.airflow_role.name
   default_namespace = snowflake_database.reddit_database.name
-  rsa_public_key    = substr(tls_private_key.airflow_svc_key.public_key_pem, 27, 398)
+  password          = var.airflow_user_password
 }
 
 # Grant role access to airflow user 

@@ -66,6 +66,13 @@ variable "snowflake_db_name" {
   description = "Snowflake Database name for Reddit news"
 }
 
+variable reddit_schema_name {
+  type        = string
+  default     = "STAGING"
+  description = "Snowflake schema name for Reddit news"
+}
+
+
 variable "airflow_user_password" {
   type        = string
   description = "description"

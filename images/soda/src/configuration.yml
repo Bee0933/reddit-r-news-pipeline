@@ -1,0 +1,13 @@
+data_source reddit_snowflake_source:
+   type: snowflake
+   connection:
+     username: AIRFLOW_USER
+     password: dataops
+     account: llbozwk-fw33224
+     database: REDDIT_DATABASE
+     warehouse: AIRFLOW_WAREHOUSE
+     role: AIRFLOW_ROLE
+     session_parameters:
+       QUERY_TAG: soda-queries
+       QUOTED_IDENTIFIERS_IGNORE_CASE: false
+   schema: staging

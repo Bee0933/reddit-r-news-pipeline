@@ -75,6 +75,13 @@ variable reddit_schema_name {
 
 variable "airflow_user_password" {
   type        = string
-  description = "description"
+  description = "Airflow Client Password"
+  sensitive   = true
+}
+
+
+variable soda_user_password {
+  type        = string
+  description = "Soda client password"
   sensitive   = true
 }

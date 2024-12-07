@@ -50,7 +50,7 @@ resource "snowflake_warehouse" "airflow_warehouse" {
   comment             = "Airflow Snowflake Warehouse"
   warehouse_size      = "LARGE"
   auto_resume         = "true"
-  auto_suspend        = 500
+  auto_suspend        = 120
   initially_suspended = true
 }
 
@@ -89,6 +89,77 @@ resource "snowflake_grant_account_role" "grants" {
 }
 
 ################## SODA ################
+
+# Create soda Role
+resource "snowflake_account_role" "soda_role" {
+  name    = "SODA_ROLE"
+  comment = "soda Role on snowflake"
+}
+
+# Grant DB usage to soda Role
+resource "snowflake_grant_privileges_to_account_role" "soda_database_grant" {
+  account_role_name = snowflake_account_role.soda_role.name
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = snowflake_database.reddit_database.name
+  }
+  all_privileges    = true
+  with_grant_option = true
+}
+
+# Grant schema USAGE to soda Role
+resource "snowflake_grant_privileges_to_account_role" "soda_schema_usage_grant" {
+  account_role_name = snowflake_account_role.soda_role.name
+  on_schema {
+    all_schemas_in_database = snowflake_database.reddit_database.name
+  }
+  all_privileges    = true
+  with_grant_option = true
+}
+
+# create warehouse for soda
+resource "snowflake_warehouse" "soda_warehouse" {
+  name                = "SODA_WAREHOUSE"
+  comment             = "Soda Snowflake Warehouse"
+  warehouse_size      = "SMALL"
+  auto_resume         = "true"
+  auto_suspend        = 120
+  initially_suspended = true
+}
+
+# Grant access to warehouse to soda role
+resource "snowflake_grant_privileges_to_account_role" "soda_warehouse_grant" {
+  privileges        = ["USAGE"]
+  account_role_name = snowflake_account_role.soda_role.name
+  on_account_object {
+    object_type = "WAREHOUSE"
+    object_name = snowflake_warehouse.soda_warehouse.name
+  }
+}
+
+# create soda user
+resource "snowflake_user" "soda_user" {
+  name              = "SODA_USER"
+  default_warehouse = snowflake_warehouse.soda_warehouse.name
+  default_role      = snowflake_account_role.soda_role.name
+  default_namespace = snowflake_database.reddit_database.name
+  password          = var.soda_user_password
+}
+
+# Grant role access to soda user 
+resource "snowflake_grant_privileges_to_account_role" "soda_user_grant" {
+  privileges        = ["MONITOR"]
+  account_role_name = snowflake_account_role.soda_role.name
+  on_account_object {
+    object_type = "USER"
+    object_name = snowflake_user.soda_user.name
+  }
+}
+
+resource "snowflake_grant_account_role" "soda_acc_grants" {
+  role_name = snowflake_account_role.soda_role.name
+  user_name = snowflake_user.soda_user.name
+}
 
 
 ################## GRAFANA ###############

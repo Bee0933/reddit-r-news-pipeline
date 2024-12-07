@@ -23,30 +23,25 @@ resource "snowflake_account_role" "airflow_role" {
 
 # Grant DB usage to Airflow Role
 resource "snowflake_grant_privileges_to_account_role" "airflow_database_grant" {
-  privileges        = ["USAGE"]
+  # privileges        = ["USAGE","CREATE SCHEMA"]
   account_role_name = snowflake_account_role.airflow_role.name
   on_account_object {
     object_type = "DATABASE"
     object_name = snowflake_database.reddit_database.name
   }
+  all_privileges    = true
+  with_grant_option = true
 }
 
 # Grant schema USAGE to Airflow Role
 resource "snowflake_grant_privileges_to_account_role" "airflow_schema_usage_grant" {
-  privileges        = ["USAGE", "MODIFY", "CREATE TABLE"]
+  # privileges        = ["USAGE", "MODIFY", "CREATE TABLE", "INSERT"]
   account_role_name = snowflake_account_role.airflow_role.name
   on_schema {
     all_schemas_in_database = snowflake_database.reddit_database.name
   }
-}
-
-# Grant access all schema in DB to Account Admin Role
-resource "snowflake_grant_privileges_to_account_role" "accountadmin_schema_grant" {
-  privileges        = ["USAGE", "MODIFY", "CREATE TABLE"]
-  account_role_name = "ACCOUNTADMIN"
-  on_schema {
-    all_schemas_in_database = snowflake_database.reddit_database.name
-  }
+  all_privileges    = true
+  with_grant_option = true
 }
 
 # create warehouse for Airflow
@@ -92,3 +87,8 @@ resource "snowflake_grant_account_role" "grants" {
   role_name = snowflake_account_role.airflow_role.name
   user_name = snowflake_user.airflow_user.name
 }
+
+################## SODA ################
+
+
+################## GRAFANA ###############

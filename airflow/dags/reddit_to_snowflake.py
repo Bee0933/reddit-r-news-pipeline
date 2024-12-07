@@ -27,9 +27,10 @@ with DAG(
     "reddit_worldnews_pipeline",
     default_args=default_args,
     description="Pipeline to fetch latest posts from Reddit worldnews",
-    schedule_interval=None,
+    schedule_interval="0 */3 * * *",
     start_date=datetime(2024, 12, 1),
     catchup=False,
+    tags=['reddit']
 ) as dag:
 
     # Task 1: Sensor to check Reddit API availability

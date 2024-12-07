@@ -1,9 +1,2 @@
-FROM apache/airflow:latest
-USER root
-RUN apt-get update && \
-    apt-get install -y libgeos-dev && \
-    rm -rf /var/lib/apt/lists/* \
-  && apt-get autoremove -yqq --purge \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
-USER airflow
+FROM apache/airflow:2.10.3-python3.9
+RUN pip install pandas psycopg2-binary praw boto3 fastparquet snowflake-sqlalchemy soda-core-snowflake soda-core-scientific --default-timeout=180

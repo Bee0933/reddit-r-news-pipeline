@@ -1,0 +1,4 @@
+checks for stg_reddit:
+  - schema:
+      fail:
+        when wrong column type:

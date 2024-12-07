@@ -19,7 +19,7 @@ bootstrap-server: check-host-var
 			ansible-playbook ./playbooks/default_packages.yaml -l '$(HOSTS)'
 
 start-airflow: check-host-var
-	ansible-playbook ./playbooks/start_airflow_server.yaml -l '$(HOSTS)'
+	ansible-playbook ./playbooks/start_airflow_server.yaml -l '$(HOSTS)' -vvv
 
 start-metrics: check-host-var
 	ansible-playbook ./playbooks/start_metrics.yaml -l '$(HOSTS)'

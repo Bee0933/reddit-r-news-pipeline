@@ -21,7 +21,7 @@ airflow_password: dataops
 additional_pip_requirements: "praw boto3 pandas fastparquet snowflake-sqlalchemy soda-core-snowflake soda-core-scientific"
 
 # soda
-soda_snowflake_user: SODA_USER
+soda_snowflake_user: AIRFLOW_USER
 soda_snowflake_password: dataops
 soda_snowflake_account: llbozwk-fw33224 
 

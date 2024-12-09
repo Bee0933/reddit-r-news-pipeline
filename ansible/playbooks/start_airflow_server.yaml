@@ -16,6 +16,11 @@
         src: templates/.env.j2
         dest: "{{ airflow_dir }}/.env"
     
+    - name: create soda config from template
+      ansible.builtin.template:
+        src: templates/soda_configuration.yml.j2
+        dest: "{{ airflow_dir }}/include/soda/configuration.yml"
+    
     - name: create traefik airflow conf from template
       ansible.builtin.template:
         src: templates/traefik.yml.j2

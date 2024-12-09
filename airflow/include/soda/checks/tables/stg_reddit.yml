@@ -2,3 +2,23 @@ checks for stg_reddit:
   - schema:
       fail:
         when wrong column type:
+          ID: TEXT
+          TITLE: TEXT
+          CREATED_UTC: DATE
+          SUBREDDIT: TEXT
+          SUBREDDIT_ID: TEXT 
+          LINK_FLAIR_TEXT: TEXT
+          URL: TEXT
+          IS_SELF: BOOLEAN
+          OVER_18: BOOLEAN
+          SPOILER: BOOLEAN
+          UPVOTE_RATIO: FLOAT
+          UPS: NUMBER
+          DOWNS: NUMBER
+          SCORE: NUMBER
+          NUM_COMMENTS: NUMBER
+          AUTHOR: TEXT
+          AUTHOR_FULLNAME: TEXT
+          IS_VIDEO: BOOLEAN
+          PERMALINK: TEXT
+

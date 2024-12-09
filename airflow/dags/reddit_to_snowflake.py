@@ -11,6 +11,7 @@ from pipelines.reddit import (
     transform_reddit_data,
 )
 from pipelines.snowflake import load_snowflake
+from include.soda.soda_check import check
 
 # aiflow defaut args
 default_args = {
@@ -65,6 +66,15 @@ with DAG(
         provide_context=True,
     )
 
+    soda_scan_task = PythonOperator(
+        task_id="run_soda_scan",
+        python_callable=check,
+        op_kwargs={
+            "scan_name": "reddit_scan",
+            "checks_subpath": "tables",
+        },
+    )
+
     # Task dependencies
     (
         wait_for_reddit_api
@@ -72,4 +82,5 @@ with DAG(
         >> upload_to_s3_task
         >> transform_data_task
         >> load_to_snowflake
+        >> soda_scan_task
     )

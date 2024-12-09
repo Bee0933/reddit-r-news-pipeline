@@ -13,6 +13,8 @@ resource "snowflake_schema" "reddit_schema" {
   name     = var.reddit_schema_name
   database = snowflake_database.reddit_database.name
 }
+
+
 ################## AIRFLOW ################
 
 # Create airflow Role
@@ -23,7 +25,6 @@ resource "snowflake_account_role" "airflow_role" {
 
 # Grant DB usage to Airflow Role
 resource "snowflake_grant_privileges_to_account_role" "airflow_database_grant" {
-  # privileges        = ["USAGE","CREATE SCHEMA"]
   account_role_name = snowflake_account_role.airflow_role.name
   on_account_object {
     object_type = "DATABASE"
@@ -35,7 +36,6 @@ resource "snowflake_grant_privileges_to_account_role" "airflow_database_grant" {
 
 # Grant schema USAGE to Airflow Role
 resource "snowflake_grant_privileges_to_account_role" "airflow_schema_usage_grant" {
-  # privileges        = ["USAGE", "MODIFY", "CREATE TABLE", "INSERT"]
   account_role_name = snowflake_account_role.airflow_role.name
   on_schema {
     all_schemas_in_database = snowflake_database.reddit_database.name

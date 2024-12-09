@@ -1,12 +1,12 @@
 data_source reddit_snowflake_source:
    type: snowflake
    connection:
-     username: ${SNOWFLAKE_USER}
-     password: ${SNOWFLAKE_PASSWORD}
-     account: ${SNOWFlAKE_ACCOUNT}
+     username: {{ soda_snowflake_user }}
+     password: {{ soda_snowflake_password }}
+     account: {{ soda_snowflake_account }}
      database: REDDIT_DATABASE
-     warehouse: SODA_WAREHOUSE
-     role: SODA_ROLE
+     warehouse: AIRFLOW_WAREHOUSE
+     role: AIRFLOW_ROLE
      session_parameters:
        QUERY_TAG: soda-queries
        QUOTED_IDENTIFIERS_IGNORE_CASE: false

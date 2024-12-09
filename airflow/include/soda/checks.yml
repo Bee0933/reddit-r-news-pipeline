@@ -1,6 +1,0 @@
-checks for stg_reddit:
-   # Checks that dataset contains fewer than 2 rows; written to fail
-     - row_count < 2:
-         name: Dataset is unreasonably small
-     - missing_count(ID) = 0:
-         name: No NULL values

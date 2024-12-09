@@ -11,3 +11,17 @@ data_source reddit_snowflake_source:
        QUERY_TAG: soda-queries
        QUOTED_IDENTIFIERS_IGNORE_CASE: false
    schema: staging
+
+   data_source reddit_snowflake_analytics_source:
+   type: snowflake
+   connection:
+     username: {{ soda_snowflake_user }}
+     password: {{ soda_snowflake_password }}
+     account: {{ soda_snowflake_account }}
+     database: REDDIT_DATABASE
+     warehouse: AIRFLOW_WAREHOUSE
+     role: AIRFLOW_ROLE
+     session_parameters:
+       QUERY_TAG: soda-queries
+       QUOTED_IDENTIFIERS_IGNORE_CASE: false
+   schema: analytics

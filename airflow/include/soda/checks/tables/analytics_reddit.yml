@@ -1,10 +1,9 @@
-checks for stg_reddit:
+checks for analytics_reddit:
   - schema:
       fail:
         when wrong column type:
           ID: TEXT
           TITLE: TEXT
-          SELFTEXT: TEXT
           CREATED_UTC: DATE
           SUBREDDIT: TEXT
           SUBREDDIT_ID: TEXT 

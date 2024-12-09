@@ -80,6 +80,16 @@ with DAG(
         python_callable=process_and_store_in_analytics,
     )
 
+    soda_scan_analytics_task = PythonOperator(
+        task_id="run_soda_analytics_scan",
+        python_callable=check,
+        op_kwargs={
+            "scan_name": "reddit_analytics_scan",
+            "checks_subpath": "tables",
+            "data_source": "reddit_snowflake_analytics_source",
+        },
+    )
+
     # Task dependencies
     (
         wait_for_reddit_api
@@ -89,4 +99,5 @@ with DAG(
         >> load_to_snowflake
         >> soda_scan_task
         >> process_and_store_task
+        >> soda_scan_analytics_task
     )

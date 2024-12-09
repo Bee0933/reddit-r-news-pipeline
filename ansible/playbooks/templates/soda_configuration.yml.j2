@@ -12,7 +12,7 @@ data_source reddit_snowflake_source:
        QUOTED_IDENTIFIERS_IGNORE_CASE: false
    schema: staging
 
-   data_source reddit_snowflake_analytics_source:
+data_source reddit_snowflake_analytics_source:
    type: snowflake
    connection:
      username: {{ soda_snowflake_user }}
@@ -25,3 +25,4 @@ data_source reddit_snowflake_source:
        QUERY_TAG: soda-queries
        QUOTED_IDENTIFIERS_IGNORE_CASE: false
    schema: analytics
+   

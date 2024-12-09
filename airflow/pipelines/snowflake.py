@@ -17,6 +17,8 @@ SNOWFLAKE_WAREHOUSE = Variable.get("SNOWFLAKE_WAREHOUSE")
 SNOWFLAKE_DATABASE = Variable.get("SNOWFLAKE_DATABASE")
 SNOWFLAKE_STG_SCHEMA = Variable.get("SNOWFLAKE_STG_SCHEMA")
 SNOWFLAKE_STG_TABLENAME = Variable.get("SNOWFLAKE_STG_TABLENAME")
+SNOWFLAKE_ANALYTICS_SCHEMA = Variable.get("SNOWFLAKE_ANALYTICS_SCHEMA")
+SNOWFLAKE_ANALYTICS_TABLENAME = Variable.get("SNOWFLAKE_ANALYTICS_TABLENAME")
 
 
 # Snowflake connection details
@@ -30,6 +32,14 @@ snowflake_config = {
 }
 
 
+def get_engine():
+    return create_engine(
+        f"snowflake://{snowflake_config['user']}:{snowflake_config['password']}@"
+        f"{snowflake_config['account']}/{snowflake_config['database']}/{snowflake_config['schema']}?"
+        f"warehouse={snowflake_config['warehouse']}"
+    )
+
+
 def load_snowflake(**kwargs):
     ti = kwargs["ti"]
     parquet_file_path = ti.xcom_pull(
@@ -38,21 +48,15 @@ def load_snowflake(**kwargs):
     if not parquet_file_path:
         raise ValueError("No Parquet file path found in XCom!")
 
-    # parquet_file_path = "/tmp/r_worldnews_2024-12-06-07:34:05.parquet"
-
     df = pd.read_parquet(parquet_file_path)
-    engine = create_engine(
-        f"snowflake://{snowflake_config['user']}:{snowflake_config['password']}@"
-        f"{snowflake_config['account']}/{snowflake_config['database']}/{snowflake_config['schema']}?"
-        f"warehouse={snowflake_config['warehouse']}"
-    )
+    engine = get_engine()
 
     # Append the data to the Snowflake table
     table_name = SNOWFLAKE_STG_TABLENAME
     try:
         df.to_sql(
             name=table_name,
-            schema=snowflake_config['schema'],
+            schema=snowflake_config["schema"],
             con=engine,
             if_exists="append",
             index=False,
@@ -62,5 +66,34 @@ def load_snowflake(**kwargs):
         )
     except Exception as e:
         raise ValueError(f"Failed to load data into Snowflake: {e}")
+    finally:
+        engine.dispose()
+
+
+def process_and_store_in_analytics(**kwargs):
+    engine = get_engine()
+    try:
+        query = f"SELECT * FROM {SNOWFLAKE_STG_SCHEMA}.{SNOWFLAKE_STG_TABLENAME}"
+        df = pd.read_sql(query, engine)
+
+        columns_to_drop = ['selftext']
+        df_filtered = df.drop(columns=columns_to_drop, errors='ignore')
+
+        with engine.connect() as connection:
+            connection.execute(f"CREATE SCHEMA IF NOT EXISTS {SNOWFLAKE_ANALYTICS_SCHEMA};")
+
+        df_filtered.to_sql(
+            name=SNOWFLAKE_ANALYTICS_TABLENAME,
+            schema=SNOWFLAKE_ANALYTICS_SCHEMA,
+            con=engine,
+            if_exists="append",
+            index=False,
+        )
+
+        logging.info(f"Data successfully processed and stored in {SNOWFLAKE_ANALYTICS_SCHEMA}.{SNOWFLAKE_ANALYTICS_TABLENAME}")
+
+    except Exception as e:
+        logging.error(f"Failed to process and store data: {e}")
+        raise
     finally:
         engine.dispose()

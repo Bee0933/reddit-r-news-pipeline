@@ -10,7 +10,7 @@ from pipelines.reddit import (
     upload_to_s3,
     transform_reddit_data,
 )
-from pipelines.snowflake import load_snowflake
+from pipelines.snowflake import load_snowflake, process_and_store_in_analytics
 from include.soda.soda_check import check
 
 # aiflow defaut args
@@ -31,7 +31,7 @@ with DAG(
     schedule_interval="0 */3 * * *",
     start_date=datetime(2024, 12, 1),
     catchup=False,
-    tags=['reddit']
+    tags=["reddit"],
 ) as dag:
 
     # Task 1: Sensor to check Reddit API availability
@@ -75,6 +75,11 @@ with DAG(
         },
     )
 
+    process_and_store_task = PythonOperator(
+        task_id="process_and_store_in_analytics",
+        python_callable=process_and_store_in_analytics,
+    )
+
     # Task dependencies
     (
         wait_for_reddit_api
@@ -83,4 +88,5 @@ with DAG(
         >> transform_data_task
         >> load_to_snowflake
         >> soda_scan_task
+        >> process_and_store_task
     )

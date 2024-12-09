@@ -29,6 +29,7 @@ REDDIT_CONFIG = {
     "password": REDDIT_PASSWORD,
 }
 
+
 # Custom Reddit Sensor
 class RedditAPISensor(BaseSensorOperator):
     def poke(self, context):
@@ -86,7 +87,6 @@ def fetch_latest_posts(**kwargs):
     df = pd.DataFrame(posts)
     # Push DataFrame to XCom as JSON (convert it to dict first)
     kwargs["ti"].xcom_push(key="raw_data", value=df.to_dict(orient="records"))
-    
 
 
 def upload_to_s3(**kwargs):

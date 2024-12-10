@@ -71,7 +71,7 @@ with DAG(
         python_callable=check,
         op_kwargs={
             "scan_name": "reddit_scan",
-            "checks_subpath": "tables",
+            "checks_subpath": "staging",
         },
     )
 
@@ -85,7 +85,7 @@ with DAG(
         python_callable=check,
         op_kwargs={
             "scan_name": "reddit_analytics_scan",
-            "checks_subpath": "tables",
+            "checks_subpath": "analytics",
             "data_source": "reddit_snowflake_analytics_source",
         },
     )

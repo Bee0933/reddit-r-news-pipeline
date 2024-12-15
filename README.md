@@ -1,3 +1,3 @@
 # reddit-r-news-pipeline
 
-<img src="static/r-reddit-1.png" alt="ELT Architecture"/>
+<img src="static/r:-reddit-1.png" alt="Architecture"/>

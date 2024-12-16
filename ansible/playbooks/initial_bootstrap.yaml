@@ -1,5 +1,5 @@
 ---
-- name: Setup initial bootstrap for server test
+- name: Setup initial bootstrap for server
   hosts: all
   gather_facts: false
   become: true

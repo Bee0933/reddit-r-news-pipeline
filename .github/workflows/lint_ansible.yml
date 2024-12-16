@@ -12,19 +12,6 @@ on:
 
 jobs:
   ansible-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ansible
-        uses: ansible/ansible-latest@v2  # Use the latest version of Ansible
-
-      - name: Install required Ansible collections from requirements.yml
-        run: |
-          ansible-galaxy collection install -r ansible/requirements.yml
-
-      - name: Run ansible-lint
-        uses: ansible/ansible-content-actions/.github/workflows/ansible_lint.yaml@main
-        with:
-          args: '-p ansible/playbooks --config ansible-lint.yaml'
+    uses: ansible/ansible-content-actions/.github/workflows/ansible_lint.yaml@main
+    with:
+      args: '-p ansible/playbooks --config ansible-lint.yaml'

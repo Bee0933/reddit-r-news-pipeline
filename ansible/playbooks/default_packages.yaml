@@ -31,7 +31,7 @@
           - iftop
           - unzip
           - sshpass
-        state: latest
+        state: present
         update_cache: true
 
     # Install Docker and Docker Compose
@@ -46,7 +46,7 @@
 
     # Add Ansible user to Docker group
     - name: Add ansible user to docker group
-      ansible.builtin.shell: "usermod -aG docker {{ bootstrap_user }}"
+      ansible.builtin.command: "usermod -aG docker {{ bootstrap_user }}"
 
     # Restart Docker service
     - name: Reload service docker, in all cases

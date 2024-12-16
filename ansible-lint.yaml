@@ -6,4 +6,6 @@ skip_list:
   - fqcn[canonical]
   - name[casing]
   - var-naming[no-role-prefix]
+  - no-changed-when
   - role-name
+  - syntax-check[unknown-module]

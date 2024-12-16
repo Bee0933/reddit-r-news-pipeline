@@ -8,3 +8,4 @@ skip_list:
   - var-naming[no-role-prefix]
   - no-changed-when
   - role-name
+  - syntax-check[unknown-module]

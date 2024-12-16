@@ -80,8 +80,8 @@ variable "airflow_user_password" {
 }
 
 
-variable soda_user_password {
+variable looker_user_password {
   type        = string
-  description = "Soda client password"
+  description = "Looker client password"
   sensitive   = true
 }

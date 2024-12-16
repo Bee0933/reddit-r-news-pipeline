@@ -1,7 +1,13 @@
-# reddit-r-news-pipeline
+# Reddit-r-worldnews-pipeline
+
+This repository contains the code for the Reddit Worldnews Subreddit pipeline and its associated infrastructure, hosted on DigitalOcean Cloud. It ensures robust storage, high availability, and enhanced security. The pipeline is designed to extract Worldnews data for analytical purposes.
 
 <img src="static/r:-reddit-1.png" alt="Architecture"/>
 
-dashboard [link](https://lookerstudio.google.com/u/0/reporting/4253a9ce-4c25-4e11-bfe8-000e476d1016/page/qSdZE)
+## Infrastructure Overview
 
-<img src="static/r-worldnews-dashboard.png" alt="Dashboard"/>
+The key components include:
+    - Digital Ocean Cloud: DigitalOcean's cloud resources serve as the foundation for the pipeline infrastructure, including components such as Droplets (servers), Spaces (S3-compatible data lake storage), Reserved IPs, and Domain Record Routing.
+
+
+<!-- <img src="static/r-worldnews-dashboard.png" alt="Dashboard" width="70%"/> -->

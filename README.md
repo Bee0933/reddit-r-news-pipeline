@@ -31,6 +31,15 @@ CI is managed through GitHub Actions, which automates and streamlines various pr
 - Services Updates: configures updates on services running on the Droplets, including the monitoring setup.
 
 ## Infrastructure Setup
-Manual Setup
+
 
 <!-- <img src="static/r-worldnews-dashboard.png" alt="Dashboard" width="70%"/> -->
+
+## Author
+Best Nyah - [GitHub](https://github.com/Bee0933)
+
+## Hire me
+Are you looking for an Engineer to build your next Data Pipeline? Get in touch: bestnyah7@gmail.com
+
+## License
+The MIT License (http://www.opensource.org/licenses/mit-license.php)

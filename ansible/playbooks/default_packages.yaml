@@ -1,5 +1,5 @@
 ---
-- name: Install default and required packages
+- name: Install default and required package
   hosts: all
   gather_facts: true
   become: true

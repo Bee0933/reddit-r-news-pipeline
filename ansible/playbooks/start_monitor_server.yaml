@@ -78,7 +78,7 @@
     # Loki
     - name: Create loki config dir
       file:
-        path: "{{loki_dir}}"
+        path: "{{ loki_dir }}"
         state: directory
 
     - name: Create Loki data directory
@@ -96,18 +96,18 @@
     - name: Template config file
       template:
         src: templates/loki.yaml.j2
-        dest: "{{loki_dir}}/loki.yaml"
+        dest: "{{ loki_dir }}/loki.yaml"
 
     - name: Start Loki
-      docker_container:
+      community.docker.docker_container:
         name: loki
         state: started
-        image: "{{ loki_docker_image }}:{{loki_docker_version}}"
+        image: "{{ loki_docker_image }}:{{ loki_docker_version }}"
         pull: true
         command: "-config.file={{ loki_dir }}/loki.yaml -config.expand-env=true"
         volumes:
-          - "{{loki_dir}}:{{loki_dir}}"
-          - "{{loki_data_dir}}:{{loki_data_dir}}"
+          - "{{ loki_dir }}:{{ loki_dir }}"
+          - "{{ loki_data_dir }}:{{ loki_data_dir }}"
         restart_policy: unless-stopped
         log_driver: json-file
         log_options:
@@ -204,7 +204,7 @@
     - name: Install deps
       ansible.builtin.apt:
         name: [prometheus-alertmanager]
-        state: latest
+        state: present
         update_cache: true
 
     - name: Create docker volume alertmanager-data

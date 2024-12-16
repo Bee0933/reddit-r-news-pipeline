@@ -52,9 +52,9 @@ CI is managed through GitHub Actions, which automates and streamlines various pr
 
     The playbooks will initialize the servers by bootstrapping and installing the necessary packages, setting up the Airflow service, and deploying monitoring services. Additionally, they configure Traefik as a reverse proxy to route requests securely to various endpoints, with unique domain records pointing to the respective services. SSL certificates from [Let's Encrypt](https://letsencrypt.org/) are also provisioned to ensure secure connections. 
 
-    *change the traefik configs [here]() to use your own domain* 
+    *change the traefik configs [here](https://github.com/Bee0933/reddit-r-news-pipeline/blob/13ade5ab88cc0a31113da57cbac744e832c7c3b7/ansible/group_vars/all/vars.yml#L29) to use your own domain* 
 
-    Access the airflow instance with the `A record` assigned to it, and login using the credentials setup in the [variables section for airflow](ansible/group_vars/all/vars.yml) 
+    Access the airflow instance with the `A record` assigned to it, and login using the credentials setup in the [variables section for airflow](https://github.com/Bee0933/reddit-r-news-pipeline/blob/13ade5ab88cc0a31113da57cbac744e832c7c3b7/ansible/group_vars/all/vars.yml#L20) 
 
     <img src="static/airflow-domain.png" alt="Airflow" width="70%"/>
 

@@ -1,0 +1,36 @@
+name: Update DAGS
+
+on:
+  push:
+    paths:
+      - 'ansible/playbooks/**'
+  pull_request:
+    paths:
+      - 'ansible/playbooks/**'
+
+jobs:
+  deploy:
+    name: Update Airflow DAG'S
+
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+          
+      - name: Install Ansible
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      # - name: Run Ansible Playbook
+      #   env:
+      #     ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
+      #     ANSIBLE_HOST_KEY_CHECKING: False
+      #   run: |
+      #     ansible-playbook -i ./hosts.ini playbooks/update_dags.yaml --private-key private_key.pem -u ${{ secrets.ANSIBLE_USER }}

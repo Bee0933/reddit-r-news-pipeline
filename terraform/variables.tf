@@ -1,12 +1,12 @@
 variable "do_token" {
   type        = string
-  description = "my do token"
+  description = "my Digital Ocean token"
   sensitive   = true
 }
 
 variable "ssh_key" {
   type        = string
-  description = "SSH keys for SFTP platform servers"
+  description = "SSH keys for servers"
   sensitive   = true
 }
 
@@ -19,13 +19,13 @@ variable "domain_name" {
 
 variable "space_access_id" {
   type        = string
-  description = "DO spaces access key"
+  description = "Digital Ocean spaces access key"
   sensitive   = true
 }
 
 variable "space_secret_key" {
   type        = string
-  description = "DO spaces secret key"
+  description = "Digital Ocean spaces secret key"
   sensitive   = true
 
 }

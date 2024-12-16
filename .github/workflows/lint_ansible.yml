@@ -13,10 +13,9 @@ on:
 jobs:
   ansible-lint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Ansible
         uses: ansible/ansible-latest@v2  # Use the latest version of Ansible

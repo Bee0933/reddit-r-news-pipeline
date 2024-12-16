@@ -3,10 +3,10 @@ name: Update DAGS
 on:
   push:
     paths:
-      - 'ansible/playbooks/**'
+      - 'airflow/dags/**'
   pull_request:
     paths:
-      - 'ansible/playbooks/**'
+      - 'airflow/dags/**'
 
 jobs:
   deploy:

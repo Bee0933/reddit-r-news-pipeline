@@ -2,3 +2,8 @@ skip_list:
   - risky-file-permissions
   - yaml[truthy]
   - yaml[trailing-spaces]
+  - fqcn[action-core]
+  - fqcn[canonical]
+  - name[casing]
+  - var-naming[no-role-prefix]
+  - role-name

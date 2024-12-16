@@ -1,5 +1,5 @@
 ---
-- name: Update Airflow DAG's
+- name: Update Airflow DAG's Folder
   hosts: airflow-server-0
   gather_facts: true
   become: true

@@ -3,7 +3,7 @@
   hosts: airflow-server-0
   gather_facts: true
   become: true
-  
+
   tasks:
     - name: Copy updates from airflow folder
       ansible.builtin.copy:

@@ -17,8 +17,8 @@ base_dir: /home/{{ bootstrap_user }}
 airflow_src_dir: "../../airflow"
 airflow_dir: "{{ base_dir }}/airflow"
 airflow_user: dataops
-airflow_password: dataops
-additional_pip_requirements: "praw boto3 pandas fastparquet snowflake-sqlalchemy soda-core-snowflake soda-core-scientific"
+airflow_password: <your airflow password>
+# additional_pip_requirements: "praw boto3 pandas fastparquet snowflake-sqlalchemy soda-core-snowflake soda-core-scientific"
 
 # soda
 soda_snowflake_user: AIRFLOW_USER
@@ -40,9 +40,9 @@ traefik_prometheus_host: prometheus.bestnyah.xyz
 traefik_alertmanager_host: alertmanager.bestnyah.xyz
 traefik_loki_host: loki.bestnyah.xyz
 traefik_grafana_host: grafana.bestnyah.xyz
-traefik_basic_auth_user: "dataops"
-traefik_basic_auth_password: "dataops"
-traefik_basic_auth_encrypt_password: "$2y$05$cMZrdRrLS2OaF7oCrvNqaOq3.WaKXwW2H24RIIlZkYR4LnwnfDyFK"
+traefik_basic_auth_user: "<your basic auth user>"
+traefik_basic_auth_password: "<your basic auth password"
+traefik_basic_auth_encrypt_password: "<your encrypted basic auth>"
 
 
 # Node Exporter
@@ -59,8 +59,8 @@ promtail_docker_imagename: grafana/promtail
 promtail_docker_version: 2.8.8
 promtail_http_listen_port: 9080
 promtail_gRPC_port: 36543
-loki_basic_auth_user: "dataops"
-loki_basic_auth_password: "dataops"
+loki_basic_auth_user: "<loki user>"
+loki_basic_auth_password: "<loki basic auth password>"
 
 # prometheus
 container_name_prometheus: prometheus
@@ -71,7 +71,7 @@ metrics_auth_user: dataops
 prometheus_web_port: 9090
 prometheus_config_dir: "{{base_dir}}/prometheus"
 prometheus_target_dir: "{{prometheus_config_dir}}/targets"
-prometheus_target_project_name: sftp-platform
+prometheus_target_project_name: airflow-pipeline
 target_template: "targets.yml"
 rules_template: "rules.yml"
 target_group: "all"
@@ -85,7 +85,7 @@ alert_manager_home_dir_default: /home/{{bootstrap_user}}
 alertmanager_config_dir: "{{ alert_manager_home_dir_default }}/alertmanager"
 alertmanager_config_file: "alertmanager.yml"
 alertmanager_rule_template: "alertmanager.yml"
-slack_wehbook: "https://hooks.slack.com/services/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"
+slack_wehbook: "<your slack wehbook>"
 slack_channel: "#platform-alerts"
 
 # Loki
@@ -108,7 +108,7 @@ provisoning_dashboard_dir: "{{ grafana_provisioning_base_dir }}/dashboards"
 provisoning_datasource_dir: "{{ grafana_provisioning_base_dir }}/datasources"
 grafana_dashboards_dir: "{{ grafana_base_dir }}/dashboards"
 grafana_port: "3000"
-grafana_admin_user: "dataops"
-grafana_admin_password: "dataops"  
+grafana_admin_user: "<your grafana user>"
+grafana_admin_password: "<your grafana password>"  
 device: device
 grafana_prometheus_datasource: prometheus

@@ -31,7 +31,8 @@ CI is managed through GitHub Actions, which automates and streamlines various pr
 - Services Updates: configures updates on services running on the Droplets, including the monitoring setup.
 
 ## Infrastructure Setup
-
+ >  🚨 Note! :
+    > The entire automation process can be fully automated using GitHub Actions. By including the necessary commands from the [`Makefile`](ansible/Makefile), the playbooks can be executed automatically whenever a change is pushed to the repository. However, for the initial setup, I preferred running the commands locally to ensure a smooth and controlled environment setup.
 
 <!-- <img src="static/r-worldnews-dashboard.png" alt="Dashboard" width="70%"/> -->
 

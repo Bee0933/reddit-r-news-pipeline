@@ -1,6 +1,6 @@
 # Reddit-r-worldnews-pipeline
 
-This repository contains the code for the Reddit Worldnews Subreddit pipeline and its associated infrastructure, hosted on DigitalOcean Cloud. It ensures robust storage, high availability, and enhanced security. The pipeline is designed to extract Worldnews data for analytical purposes.
+This repository contains the code for a production-ready and secure Airflow instance powering the Reddit Worldnews Subreddit pipeline and its associated infrastructure, hosted on DigitalOcean Cloud. The infrastructure ensures robust storage, high availability, and enhanced security. The pipeline is designed to extract Worldnews data for analytical purposes, with comprehensive monitoring and observability integrated to track performance, health, and reliability.
 
 <img src="static/r:-reddit-1.png" alt="Architecture"/>
 

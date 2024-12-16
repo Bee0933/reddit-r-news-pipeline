@@ -14,4 +14,4 @@ jobs:
   ansible-lint:
     uses: ansible/ansible-content-actions/.github/workflows/ansible_lint.yaml@main
     with:
-      args: '-p playbooks'
+      args: '-p ansible/playbooks'

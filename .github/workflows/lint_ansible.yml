@@ -2,11 +2,13 @@ name: Ansible files & Deployment
 
 on:
   push:
+    branches: [main]
     paths:
       - 'ansible/playbooks/**'
-  pull_request:
-    paths:
-      - 'ansible/playbooks/**'
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - 'ansible/playbooks/**'
 
 jobs:
   ansible-lint:

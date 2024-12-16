@@ -1,5 +1,5 @@
 ---
-- name: Install default and required packages
+- name: Install default and required packages test-ci
   hosts: all
   gather_facts: true
   become: true

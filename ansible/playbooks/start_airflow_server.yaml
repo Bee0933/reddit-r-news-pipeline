@@ -44,4 +44,3 @@
       command: docker compose -f docker-compose.yaml up -d
       args:
         chdir: "{{ airflow_dir }}"
-        

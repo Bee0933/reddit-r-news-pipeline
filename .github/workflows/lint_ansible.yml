@@ -13,7 +13,4 @@ jobs:
     uses: ansible/ansible-content-actions/.github/workflows/ansible_lint.yaml@main
     with:
       args: '-p ansible/playbooks --config ansible-lint.yaml'
-
-
-
-      # requirements_file: "ansible/requirements.yml"
+      requirements_file: "ansible/requirements.yml"

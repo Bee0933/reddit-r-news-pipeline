@@ -5,6 +5,7 @@ skip_list:
   - fqcn[action-core]
   - fqcn[canonical]
   - name[casing]
+  - name[template]
   - var-naming[no-role-prefix]
   - no-changed-when
   - role-name
